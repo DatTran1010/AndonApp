@@ -86,9 +86,18 @@ export const getToken = async () => {
   return token;
 };
 
-export async function onDisplayNotification({title = '', body = ''}) {
-  // Request permissions (required for iOS)
+export type DisplayNotificationType = {
+  title?: string;
+  body?: string;
+  caterory?: string;
+  data?: any;
+};
 
+export async function onDisplayNotification(
+  propsNotification: DisplayNotificationType,
+) {
+  // Request permissions (required for iOS)
+  const {body, caterory, data, title} = propsNotification;
   if (Platform.OS === 'ios') {
     await notifee.requestPermission();
   }
@@ -105,6 +114,7 @@ export async function onDisplayNotification({title = '', body = ''}) {
   await notifee.displayNotification({
     title: title,
     body: body,
+    data: data,
     android: {
       channelId: channelId,
       importance: AndroidImportance.HIGH,
@@ -114,24 +124,33 @@ export async function onDisplayNotification({title = '', body = ''}) {
         id: 'default',
       },
       category: AndroidCategory.MESSAGE,
-      style: {type: AndroidStyle.BIGTEXT, text: body},
-      actions: [
-        {
-          title: 'Tiếp nhận',
-          pressAction: {
-            id: 'receive',
-          },
-        },
-        {
-          title: 'Bỏ qua',
-          pressAction: {
-            id: 'cancel',
-          },
-        },
-      ],
+      style: {type: AndroidStyle.BIGTEXT, text: body as string},
+      actions:
+        caterory === 'btnreceive'
+          ? [
+              {
+                title: 'Tiếp nhận',
+                pressAction: {
+                  id: 'receive',
+                },
+              },
+              {
+                title: 'Bỏ qua',
+                pressAction: {
+                  id: 'cancel',
+                },
+              },
+            ]
+          : [],
     },
     ios: {
-      categoryId: 'post',
+      categoryId: caterory === null ? '' : caterory,
+      sound: 'default',
+      attachments: [
+        {
+          url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvcpGBVVzF9fKNWYFt4UrpqOaDz1vAwUafUgOSGM6Dg&s',
+        },
+      ],
     },
   });
 }
@@ -139,12 +158,12 @@ export async function onDisplayNotification({title = '', body = ''}) {
 export async function setCategories() {
   await notifee.setNotificationCategories([
     {
-      id: 'post',
+      id: 'btnreceive',
       actions: [
         {
           id: 'receive',
           title: 'Tiếp nhận',
-          foreground: true,
+          // foreground: true,
         },
         {
           id: 'cancel',

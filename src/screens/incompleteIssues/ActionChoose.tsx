@@ -18,14 +18,16 @@ import issuesService, {
 } from '../../apis/issuesService';
 import {showSnackbarStore, useAppSelector} from '../../redux/Store';
 import useApiMutation from '../../../services/useApiMutation';
+import {NavigationProp} from '@react-navigation/native';
 
 type Props = {
   onClose?: () => void;
   data: InCompleteIssuesType;
   onRefeshIssues?: () => void;
+  navigation?: NavigationProp<any, any>;
 };
 const ActionChoose = (props: Props) => {
-  const {onClose, data, onRefeshIssues} = props;
+  const {onClose, data, onRefeshIssues, navigation} = props;
   const [hideKeyBoard, setHideKeyBoard] = React.useState(false);
   const {userName, language} = useAppSelector(state => state.app);
 
@@ -127,6 +129,7 @@ const ActionChoose = (props: Props) => {
 
   const handleReceive = (loai: number) => {
     if (loai === 1) {
+      // tiếp nhận
       Alert.alert(t('thong-bao'), t('ban-co-muon-tiep-nhan-khong'), [
         {
           text: t('huy'),
@@ -142,6 +145,12 @@ const ActionChoose = (props: Props) => {
           },
         },
       ]);
+    } else {
+      bottomSheetRef.current?.handleCloseAcctionSheet();
+      navigation?.navigate('InfoExChangeScreen', {
+        idmay: data.ID_MAY,
+        idsc: data.ID_SC,
+      });
     }
   };
 
@@ -159,7 +168,7 @@ const ActionChoose = (props: Props) => {
           ? HEIGHT_ANDROID_5_INCH
             ? 25
             : 20
-          : 15
+          : 18
       }
       onClose={onClose}
       title={data.SN_BTH + ' - ' + data.MS_MAY + ' - ' + data.TEN_MAY}>

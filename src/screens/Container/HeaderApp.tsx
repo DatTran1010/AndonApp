@@ -19,6 +19,7 @@ const HeaderApp = (props: Props) => {
   const {isGoBack = true} = props;
   const {top} = useSafeAreaInsets();
   const userInfo = useAppSelector(state => state.app.userInfo);
+
   return (
     <View
       style={[

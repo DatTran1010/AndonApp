@@ -1,5 +1,5 @@
 import {ComboModelType, JsonRespoionseModelType} from '../types/CommonType';
-import {InCompleteIssuesType} from '../types/issuesType';
+import {InCompleteIssuesType, ListInfoExchangeType} from '../types/issuesType';
 import http from '../utils/https';
 import ApiUrl from './ApiUrl';
 
@@ -7,13 +7,21 @@ export type PropsSaveActionChooseType = {
   nngu: number;
   username: string;
   idsc: number;
-  idnn: number;
-  description: string;
+  idnn?: number;
+  description?: string;
   loai: number;
   id_sk: number;
   id_may: number;
   sn_bth: string;
   id_dd: number;
+};
+
+export type PropsSaveInfoExchangeType = {
+  nngu: number;
+  username: string;
+  idsc: number;
+  idns: number; // id nhan su
+  message: string;
 };
 
 const issuesService = {
@@ -38,6 +46,29 @@ const issuesService = {
       ApiUrl.issues.SaveActionChoose,
       JSON.stringify(props),
     ),
+
+  getComboCurrentReceiver: (username: string, nngu: number, idmay: number) =>
+    http.get<ComboModelType[]>(ApiUrl.combo.GetCboCurrentReceiver, {
+      params: {
+        username,
+        nngu,
+        idmay,
+      },
+    }),
+
+  getListInfoExchange: (username: string, nngu: number, idsc: number) =>
+    http.get<ListInfoExchangeType[]>(ApiUrl.issues.GetListInfoExchange, {
+      params: {
+        username,
+        nngu,
+        idsc,
+      },
+    }),
+
+  saveInfoExchange: (props: PropsSaveInfoExchangeType) =>
+    http.post<JsonRespoionseModelType>(ApiUrl.issues.SaveInfoExchange, null, {
+      params: props,
+    }),
 };
 
 export default issuesService;

@@ -1,11 +1,10 @@
 // import { jwtDecode } from 'jwt-decode';
-import * as asyncStorageItem from '../common/AsyncStorageItem';
+
+import localStorage from './localStorage';
 
 export const getAccessToken = async () => {
   try {
-    const accessToken = (await asyncStorageItem.getItem(
-      'AccessToken',
-    )) as string;
+    const accessToken = (await localStorage.getItem('AccessToken')) as string;
 
     return accessToken;
   } catch (error) {

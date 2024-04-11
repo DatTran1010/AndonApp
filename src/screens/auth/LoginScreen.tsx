@@ -1,5 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Formik} from 'formik';
@@ -22,6 +29,7 @@ import {useDispatch} from 'react-redux';
 import {setCheckinStatus, setUserInfo, setUserName} from '../../redux/AppSlice';
 import {AppDispatch} from '../../redux/Store';
 import {fetchCheckInStatus} from '../../redux/feature/auth-slice';
+import {localStorage, localStorageKey} from '../../utils';
 
 interface LoginProps {
   navigation: any;
@@ -45,8 +53,17 @@ const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
 
   //#endregion
   const handleLogin = async (value: initialValuesLogin) => {
+    const tokenDevice = await localStorage.getItem(
+      localStorageKey.TOKEN_DEVICE,
+    );
+
     loginMuation.mutateAsync(
-      {password: value.password, username: value.username, tokenDevies: '123'},
+      {
+        password: value.password,
+        username: value.username,
+        tokenDevies: tokenDevice,
+        platform: Platform.OS === 'android' ? 1 : 2,
+      },
       {
         onSuccess(data) {
           if (data.StatusCode === HttpStatusCode.Ok) {

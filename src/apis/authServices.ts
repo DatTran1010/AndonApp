@@ -11,6 +11,7 @@ type PropsLogin = {
   username: string;
   password: string;
   tokenDevies: string;
+  platform: number; // 1 android 2 ios
 };
 export const loginAsyn = async (props: PropsLogin) => {
   try {
@@ -20,6 +21,7 @@ export const loginAsyn = async (props: PropsLogin) => {
       Username: props.username,
       Password: props.password,
       Token: props.tokenDevies,
+      Platform: props.platform,
     };
 
     const params = null;

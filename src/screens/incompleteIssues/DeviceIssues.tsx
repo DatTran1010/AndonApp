@@ -7,13 +7,15 @@ import {InCompleteIssuesType} from '../../types/issuesType';
 import {t} from 'i18next';
 import Colors from '../../common/Colors';
 import Animated, {FadeInLeft, FadeOutRight} from 'react-native-reanimated';
+import {NavigationProp} from '@react-navigation/native';
 
 type Props = {
   item: InCompleteIssuesType;
   onRefeshIssues?: () => void;
+  navigation?: NavigationProp<any, any>;
 };
 const DeviceIssues = (props: Props) => {
-  const {item, onRefeshIssues} = props;
+  const {item, onRefeshIssues, navigation} = props;
 
   const [showChoose, setShowChoose] = React.useState({
     show: false,
@@ -73,6 +75,7 @@ const DeviceIssues = (props: Props) => {
             setShowChoose({show: false, tinhTrang: -1});
           }}
           onRefeshIssues={onRefeshIssues}
+          navigation={navigation}
         />
       )}
     </>

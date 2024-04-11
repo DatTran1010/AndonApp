@@ -73,5 +73,7 @@
   "save": "Lưu",
   "chua-nhap-nnnm": "Chưa nhập nguyên nhân dừng máy",
   "ban-co-muon-tiep-nhan-khong": "Bạn có muốn tiếp nhận không ?",
-  "ban-co-muon-luu-nguyen-nhan-dung-may": "Bạn có muốn lưu nguyên nhân dừng máy không ?"
+  "ban-co-muon-luu-nguyen-nhan-dung-may": "Bạn có muốn lưu nguyên nhân dừng máy không ?",
+  "nguoi-nhan": "Người nhận",
+  "gui-tin-nhan-khong-thanh-cong": "Gửi tin nhắn không thành công"
 }

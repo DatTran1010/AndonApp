@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import React, {forwardRef, memo, useEffect, useRef, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {t} from 'i18next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import TextInputComponent from './TextInputComponent';
@@ -53,7 +52,7 @@ interface SelectionComponentProps {
 const SelectionComponent: React.FC<SelectionComponentProps> = forwardRef(
   (
     {
-      placeholder,
+      placeholder = '',
       onPressSelection,
       data,
       labelField,
@@ -288,7 +287,7 @@ const SelectionComponent: React.FC<SelectionComponentProps> = forwardRef(
                   backgroundColor: disable ? Colors.gray100 : Colors.white,
                 },
               ]}>
-              {selectedValue.label !== '' ? (
+              {selectedValue.label !== '' && placeholder !== '' ? (
                 <Text
                   ref={ref}
                   style={[
@@ -435,9 +434,7 @@ const SelectionComponent: React.FC<SelectionComponentProps> = forwardRef(
 export default memo(SelectionComponent);
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.white,
-  },
+  container: {},
   label: {
     position: 'absolute',
     left: 10,

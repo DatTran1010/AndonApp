@@ -14,8 +14,11 @@ export default {
   issues: {
     GetListIssuesByUser: '/api/app/issues/get-list-issues-by-user',
     SaveActionChoose: '/api/app/issues/post-save-action-choose',
+    GetListInfoExchange: '/api/app/issues/get-list-info-exchange',
+    SaveInfoExchange: '/api/app/issues/post-save-info-exchange',
   },
   combo: {
     GetCboModel: '/web/cbo/get-cbo-model',
+    GetCboCurrentReceiver: '/api/app/cbo/get-cbo-current-receiver',
   },
 };

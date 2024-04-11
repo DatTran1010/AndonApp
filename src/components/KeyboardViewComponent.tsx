@@ -1,4 +1,10 @@
-import {RefreshControl, ScrollView, StyleSheet, ViewStyle} from 'react-native';
+import {
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React, {ReactNode} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
@@ -18,19 +24,19 @@ const KeyboardViewComponent = (props: Props) => {
     refreshing = false,
     onRefresh,
   } = props;
+
   return (
     <KeyboardAwareScrollView
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       contentContainerStyle={[styles.container, styleParent]}
-      extraScrollHeight={35}
+      keyboardShouldPersistTaps={'handled'}
+      enableAutomaticScroll={true}
+      extraScrollHeight={Platform.OS === 'ios' ? 35 : 0}
+      enableOnAndroid={true}
       showsVerticalScrollIndicator={false}>
-      <ScrollView
-        bounces={true}
-        contentContainerStyle={[styles.scrollView, styleChildren]}>
-        {children}
-      </ScrollView>
+      <View style={[styles.scrollView, styleChildren]}>{children}</View>
     </KeyboardAwareScrollView>
   );
 };
@@ -39,7 +45,7 @@ export default KeyboardViewComponent;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
   },
   scrollView: {
     flexGrow: 1,

@@ -1,18 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import i18next from 'i18next';
 import {useTranslation} from 'react-i18next';
 
-import {setItem} from '../common/AsyncStorageItem';
 import Theme from '../common/Theme';
 import Colors from '../common/Colors';
 import {setLanguaApp} from '../redux/AppSlice';
-import {RootState} from '../types/CommonType';
 import TouchableOpacityComponent from './TouchableOpacityComponent';
 import IconTypeComponent from './IconTypeComponent';
 import AcctionSheetComponent from './AcctionSheetComponent';
+import {useAppSelector} from '../redux/Store';
+import {localStorage, localStorageKey} from '../utils';
 
 interface LanguesComponentProps {
   onSelectionLanguae?: (value: any) => void;
@@ -22,7 +22,7 @@ const LanguesComponent: React.FC<LanguesComponentProps> = ({
 }) => {
   const {t} = useTranslation();
 
-  const languege = useSelector((state: RootState) => state.app.language);
+  const languege = useAppSelector(state => state.app.language);
   const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -37,7 +37,7 @@ const LanguesComponent: React.FC<LanguesComponentProps> = ({
   };
 
   const saveLanguageStorage = async (value: string) => {
-    await setItem('LANGUAGE', value);
+    await localStorage.setItem(localStorageKey.LANGUAGE, value);
   };
 
   const handleSelectedLanguage = (value: string) => {

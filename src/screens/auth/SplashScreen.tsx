@@ -10,6 +10,7 @@ import {
 } from '../../../services';
 import {LoadingComponent} from '../../components';
 import {NavigationService} from '../navigation';
+import {localStorage, localStorageKey} from '../../utils';
 
 const SplashScreen = () => {
   const dispatch = useDispatch();
@@ -108,9 +109,7 @@ const SplashScreen = () => {
 
   const getTokenDevices = async () => {
     const newTokenDevies = await getToken();
-
-    // await asyncStorageItem.setItem('token-device', newTokenDevies);
-    // dispatch(setTokenDevice(newTokenDevies));
+    await localStorage.setItem(localStorageKey.TOKEN_DEVICE, newTokenDevies);
     return newTokenDevies;
   };
 

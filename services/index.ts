@@ -4,4 +4,5 @@ import {
   requestUserPermission,
   setCategories,
 } from './notification';
+
 export {getToken, requestUserPermission, setCategories, onDisplayNotification};

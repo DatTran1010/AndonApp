@@ -219,12 +219,16 @@ export interface CboListPhuTungType {
 }
 
 export interface DataNotificationType {
-  msmay?: string;
-  mspbt?: string;
-  type: 'WO' | 'GS';
-  msgstt?: string;
-  tenmay?: string;
-  flag?: number;
+  body?: string;
+  title?: string;
+  platform?: number;
+  language?: number;
+  idmay?: number;
+  category?: string;
+  snbth?: string;
+  username?: string;
+  iddd?: number;
+  idsc?: number;
 }
 
 export interface InfoLogin {

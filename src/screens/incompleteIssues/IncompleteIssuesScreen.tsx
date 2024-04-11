@@ -41,6 +41,7 @@ const IncompleteIssues = (props: Props) => {
                 key={item.ID_SC}
                 item={item}
                 onRefeshIssues={handleRefeshIssues}
+                navigation={navigation}
               />
             );
           })}

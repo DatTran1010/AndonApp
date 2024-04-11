@@ -20,3 +20,32 @@ export interface InCompleteIssuesType {
   MS_MAY: string;
   TEN_TINH_TRANG: string;
 }
+
+export interface ListInfoExchangeType {
+  ID_TTT: number;
+  ID_SC: number;
+  MESSAGE: string;
+  ID_NGUOI_GUI: number;
+  ID_NGUOI_NHAN: number;
+  MS_NGUOI_GUI: string;
+  HO_TEN_NGUOI_GUI: string;
+  TG_GUI: string;
+  USERNAME_NGUOI_GUI: string;
+  TYPE_MESSAGE: number; // 1: MÌNH GỬI, 2: NGƯỜI KHÁC GỬI
+}
+
+export interface ResultSaveInfoExchange {
+  RES: number;
+  TOKEN: string;
+  MESSAGE: string;
+  TITLE: string;
+  PLATFORM: number;
+  LANGUAGE: number;
+  CATEGORY: string;
+  ID_MAY: number;
+  SN_BTH: string;
+  ID_SK: string;
+  USERNAME: string;
+  ID_DD: string;
+  ID_SC: string;
+}

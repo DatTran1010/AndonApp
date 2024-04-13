@@ -3,22 +3,23 @@ import {
   View,
   StyleSheet,
   TextInput,
-  ScrollView,
   Keyboard,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from 'react-native';
 import React from 'react';
-import Theme from '../../../common/Theme';
+import {t} from 'i18next';
+import {HubConnection, HubConnectionBuilder} from '@microsoft/signalr';
+
 import {IconTypeComponent, LoadingComponent} from '../../../components';
-import Colors from '../../../common/Colors';
 import {useQuery} from '@tanstack/react-query';
 import issuesService from '../../../apis/issuesService';
-import {ListInfoExchangeType} from '../../../types/issuesType';
 import ItemMessage from './ItemMessage';
 import useApiMutation from '../../../../services/useApiMutation';
 import {showSnackbarStore} from '../../../redux/Store';
-import {t} from 'i18next';
+import ChooseImage from './ChooseImage';
+import {ImageType} from '../../../types/CommonType';
 
 type Props = {
   username: string;
@@ -28,11 +29,13 @@ type Props = {
 const ListMessage = React.forwardRef((props: Props, ref) => {
   const {idsc, language, username} = props;
   const scrollViewRef = React.useRef<FlatList>(null);
-  const [dataInfoExchange, setDataInfoExChange] =
-    React.useState<ListInfoExchangeType[]>();
+
   const idReceiverRef = React.useRef(-1);
   const messageRef = React.useRef('');
   const textInputRef = React.useRef<TextInput>(null);
+
+  const hubConnectionRef = React.useRef<HubConnection>();
+  // const [hubConnection, setHubConnection] = React.useState<HubConnection>();
 
   //#region  api
   const listInfoExchange = useQuery({
@@ -46,23 +49,75 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
 
   //#endregion
 
-  //   React.useEffect(() => {
-  //     const KeyboardDidShowListener = Keyboard.addListener(
-  //       'keyboardDidShow',
-  //       updateScrollView,
-  //     );
-  //     return () => {
-  //       KeyboardDidShowListener.remove();
-  //     };
-  //   }, []);
+  const updateScrollView = () => {
+    setTimeout(() => {
+      if (
+        scrollViewRef.current &&
+        listInfoExchange.data?.ResponseData &&
+        listInfoExchange.data.ResponseData.length > 0
+      ) {
+        scrollViewRef.current.scrollToIndex({index: 0, animated: true});
+      }
+    }, 100);
+  };
 
-  //   const updateScrollView = () => {
-  //     setTimeout(() => {
-  //       if (scrollViewRef.current) {
-  //         scrollViewRef.current.scrollToEnd({animated: true});
-  //       }
-  //     }, 100);
-  //   };
+  //connect hub
+  const createHubConnection = async () => {
+    const url = 'http://192.168.2.15:7174';
+    const hubConnectionContext = new HubConnectionBuilder()
+      // .withUrl('http://192.168.2.21:7174/databieudo', {
+      //   skipNegotiation: true,
+      //   transport: HttpTransportType.WebSockets,
+      // })
+
+      .withUrl(`${url + '/ReceiveMessage'}`)
+      .withAutomaticReconnect()
+      .build();
+    try {
+      hubConnectionContext.onclose(error => {
+        if (error) {
+          Alert.alert(`Connection closed due to an error: ${error}`);
+        } else {
+          console.log('Connection closed normally.');
+          // Hiển thị thông báo khi kết nối bị đóng
+          // Alert.alert('Connection to the server has been closed.');
+          // setHubConnection(hubConnection);
+        }
+      });
+
+      await hubConnectionContext
+        .start()
+        .then(() => {
+          console.log('kết nối thàh công');
+        })
+        .catch((error: any) => {
+          console.log('Mất kết nối đến server');
+          console.error('Error connecting to SignalR Hub:', error);
+        });
+    } catch {}
+
+    hubConnectionRef.current = hubConnectionContext;
+  };
+
+  React.useEffect(() => {
+    createHubConnection();
+  }, []);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      listenDatasHub();
+    }, 1000);
+
+    const KeyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      updateScrollView,
+    );
+    return () => {
+      KeyboardDidShowListener.remove();
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useImperativeHandle(ref, () => ({
     setValueReceiver,
@@ -75,11 +130,51 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
     idReceiverRef.current = idreceiver;
   };
 
+  const getListInfoExchange = async (sendSuccess: boolean) => {
+    await hubConnectionRef.current?.invoke('ReceiveMessage', idsc, sendSuccess);
+  };
+
+  const listenDatasHub = () => {
+    if (hubConnectionRef.current) {
+      try {
+        // nhận dữ liệu mới khi có sự thay đổi
+        hubConnectionRef.current.on(
+          'ReceiveMessage',
+          async (hubIdsc: number) => {
+            if (hubIdsc === idsc) {
+              // nếu người gửi trong cùng sự cố với nhau thì mới set lại value, còn không thì không set value
+              await listInfoExchange.refetch();
+            }
+          },
+        );
+      } catch {}
+    }
+  };
+
+  const handleContentSizeChange = () => {
+    updateScrollView();
+  };
+
   const handleChangeMessage = (value: string) => {
     messageRef.current = value;
   };
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (dataIamges?: ImageType[]) => {
+    if (
+      (messageRef.current === '' || messageRef.current === undefined) &&
+      dataIamges === undefined
+    ) {
+      textInputRef.current?.focus();
+      return;
+    }
+
+    const dataFiles = new FormData();
+    if (dataIamges) {
+      dataIamges.map(image => {
+        dataFiles.append('images', image);
+      });
+    }
+
     await saveInfoExchangeMuation.mutateAsync(
       {
         idns: idReceiverRef.current,
@@ -87,12 +182,17 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
         message: messageRef.current,
         nngu: language,
         username: username,
+        images: dataIamges ? dataFiles : undefined,
       },
       {
         async onSuccess(data) {
           textInputRef.current?.clear();
-          if (data.IsSuccessStatusCode) {
-            await listInfoExchange.refetch();
+          if (
+            data.IsSuccessStatusCode &&
+            data.ResponseData.ResponseCode === 1
+          ) {
+            // nếu tin nhắn được lưu thành công, thì gọi lại dữ liệu,
+            getListInfoExchange(true);
           } else {
             Keyboard.dismiss();
             showSnackbarStore(t('gui-tin-nhan-khong-thanh-cong'), 'error');
@@ -101,13 +201,39 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
       },
     );
   };
+
   return (
     <View style={styles.container}>
+      {/* {listInfoExchange.isFetching ? (
+        <LoadingComponent />
+      ) : (
+        <FlatList
+          ref={scrollViewRef}
+          data={
+            (listInfoExchange.data &&
+              listInfoExchange.data.IsSuccessStatusCode &&
+              listInfoExchange.data.ResponseData) ||
+            []
+          }
+          onContentSizeChange={handleContentSizeChange}
+          inverted={true}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={item => item.ID_TTT.toString()}
+          renderItem={({item}) => {
+            return <ItemMessage item={item} />;
+          }}
+        />
+      )} */}
+
       <FlatList
         ref={scrollViewRef}
         data={
-          (listInfoExchange.data && listInfoExchange.data.ResponseData) || []
+          (listInfoExchange.data &&
+            listInfoExchange.data.IsSuccessStatusCode &&
+            listInfoExchange.data.ResponseData) ||
+          []
         }
+        onContentSizeChange={handleContentSizeChange}
         inverted={true}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.ID_TTT.toString()}
@@ -136,11 +262,13 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <IconTypeComponent
-          style={{marginRight: 5}}
-          iconname="camera"
-          iconsize={24}
-        />
+        <View className="mr-2">
+          <ChooseImage
+            onSelectDataImage={dataImages => {
+              handleSendMessage(dataImages);
+            }}
+          />
+        </View>
         <View
           style={{
             borderWidth: 1,
@@ -170,7 +298,9 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
               height: 36,
               borderRadius: 20,
             }}
-            onPress={handleSendMessage}>
+            onPress={() => {
+              handleSendMessage();
+            }}>
             {!saveInfoExchangeMuation.isPending ? (
               <IconTypeComponent iconname="send" iconsize={24} type="Feather" />
             ) : (

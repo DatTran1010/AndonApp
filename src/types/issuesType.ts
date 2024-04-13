@@ -32,6 +32,7 @@ export interface ListInfoExchangeType {
   TG_GUI: string;
   USERNAME_NGUOI_GUI: string;
   TYPE_MESSAGE: number; // 1: MÌNH GỬI, 2: NGƯỜI KHÁC GỬI
+  IS_IMAGE: boolean; // 1: MÌNH GỬI, 2: NGƯỜI KHÁC GỬI
 }
 
 export interface ResultSaveInfoExchange {

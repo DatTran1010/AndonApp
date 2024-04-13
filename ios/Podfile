@@ -50,6 +50,13 @@ target 'AndonApp' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+
+  permissions_path = '../node_modules/react-native-permissions/ios'
+
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
+  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
+
   target 'AndonAppTests' do
     inherit! :complete
     # Pods for testing
@@ -65,3 +72,10 @@ target 'AndonApp' do
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
+
+# target 'ImageNotification' do
+#   use_frameworks! :linkage => :static
+#   pod 'Firebase/Messaging'
+# end
+
+

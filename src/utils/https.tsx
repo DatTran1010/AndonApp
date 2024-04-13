@@ -54,6 +54,7 @@ class Http {
 
     // Có phản hồi từ máy chủ, nhưng nó không thành công (vd: mã lỗi HTTP không phải 2xx)
 
+    console.log('error.response', error.response);
     if (error.response) {
       let responseCode = error.response.data.StatusCode;
       let responseMessage = error.response.data.Message;

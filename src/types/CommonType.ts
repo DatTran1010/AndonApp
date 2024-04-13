@@ -229,6 +229,7 @@ export interface DataNotificationType {
   username?: string;
   iddd?: number;
   idsc?: number;
+  dataOnly?: boolean;
 }
 
 export interface InfoLogin {
@@ -241,4 +242,10 @@ export interface ComboModelType {
   id: number;
   value: string;
   label: string;
+}
+
+export interface ImageType {
+  uri: string | undefined;
+  type?: string;
+  name?: string;
 }

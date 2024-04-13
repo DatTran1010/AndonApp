@@ -17,6 +17,7 @@ export type PropsSaveActionChooseType = {
 };
 
 export type PropsSaveInfoExchangeType = {
+  images?: any;
   nngu: number;
   username: string;
   idsc: number;
@@ -66,9 +67,22 @@ const issuesService = {
     }),
 
   saveInfoExchange: (props: PropsSaveInfoExchangeType) =>
-    http.post<JsonRespoionseModelType>(ApiUrl.issues.SaveInfoExchange, null, {
-      params: props,
-    }),
+    http.post<JsonRespoionseModelType>(
+      ApiUrl.issues.SaveInfoExchange,
+      props.images,
+      {
+        params: {
+          idns: props.idns,
+          idsc: props.idsc,
+          message: props.message,
+          nngu: props.nngu,
+          username: props.username,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    ),
 };
 
 export default issuesService;

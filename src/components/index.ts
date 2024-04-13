@@ -1,4 +1,3 @@
-import AcctionSheetChooseImageComponent from './AcctionSheetChooseImageComponent';
 import AcctionSheetComponent from './AcctionSheetComponent';
 import AcctionSheetCustomComponent from './AcctionSheetCustomComponent';
 import ButtonComponent from './ButtonComponent';
@@ -6,6 +5,7 @@ import ButtonSaveModalComponent from './ButtonSaveModalComponent';
 import ButtonModalComponent from './ButtonSaveModalComponent';
 import CardComponent from './CardComponent';
 import CheckboxComponent from './CheckboxComponent';
+import ChooseImageComponent from './ChooseImageComponent';
 import DateTimeComponent from './DateTimeComponent';
 import HeaderFilterComponent from './HeaderFillterComponent';
 import IconButtonComponent from './IconButtonComponent';
@@ -49,7 +49,6 @@ export {
   AcctionSheetCustomComponent,
   RadioButtonComponent,
   LineComponent,
-  AcctionSheetChooseImageComponent,
   KeyboardViewComponent,
   ButtonComponent,
   TouchableOpacityComponent,
@@ -58,4 +57,5 @@ export {
   ToastComponent,
   SnackbarComponent,
   SnackbarCustomComponent,
+  ChooseImageComponent,
 };

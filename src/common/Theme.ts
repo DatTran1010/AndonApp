@@ -33,6 +33,7 @@ const Theme: ThemeProps = {
     color: Colors.black,
     flexShrink: 1,
     fontFamily: 'Montserrat-BoldItalic',
+    fontStyle: 'italic',
   },
   fontTitle: {
     fontWeight: 'bold',

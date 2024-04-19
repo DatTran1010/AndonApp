@@ -8,11 +8,10 @@ import {IconTypeComponent} from '../../components';
 import Colors from '../../common/Colors';
 import {useDispatch} from 'react-redux';
 import AddCheckin from './modal/AddCheckin';
-import {t} from 'i18next';
 import useApiMutation from '../../../services/useApiMutation';
 import {getListMayCheckinByCa} from '../../apis/checkinServices';
 import {setCheckDataMayCheckin} from '../../redux/AppSlice';
-import {showSnackbarStore, useAppSelector} from '../../redux/Store';
+import {useAppSelector} from '../../redux/Store';
 
 interface Props {
   navigation?: NavigationProp<any, any>;
@@ -118,6 +117,7 @@ export default CheckInScreen;
 const styles = StyleSheet.create({
   headrContent: {
     flex: 1,
+    marginBottom: 8,
   },
   bodyContent: {
     flex: 3,

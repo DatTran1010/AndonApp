@@ -12,7 +12,7 @@ export interface UserProfileType {
   STATUS_CHECK_IN: boolean | null;
   TEN_VAI_TRO: string | null;
   Res: number | null;
-  PASS_WORK: string | null;
+  PASSWORD: string | null;
 }
 
 export interface ApiResponse<T> {
@@ -230,6 +230,9 @@ export interface DataNotificationType {
   iddd?: number;
   idsc?: number;
   dataOnly?: boolean;
+  screen?: string;
+  msmay?: string;
+  tenmay?: string;
 }
 
 export interface InfoLogin {

@@ -132,3 +132,28 @@ export const getDate = (date: Date) => {
   const datenew = new Date(date.setUTCHours(0, 0, 0, 0));
   return datenew;
 };
+
+export const getWeekDates = (currentDate: moment.Moment) => {
+  // Định dạng ngày hiện tại với `moment`
+  const currentMoment = moment(currentDate);
+
+  // Xác định ngày đầu tuần và ngày cuối tuần dựa trên ngày hiện tại
+  const startOfWeek = currentMoment.clone().startOf('isoWeeks');
+
+  const endOfWeek = currentMoment.clone().endOf('isoWeeks');
+
+  // Khởi tạo mảng để chứa các ngày trong tuần
+  const weekDates = [];
+
+  // Lặp qua các ngày từ ngày đầu tuần đến ngày cuối tuần và thêm vào mảng
+  for (
+    let day = startOfWeek;
+    day.isSameOrBefore(endOfWeek);
+    day.add(1, 'day')
+  ) {
+    // Sử dụng format để chỉ lấy định dạng ngày
+    weekDates.push(new Date(day.format('YYYY-MM-DD')));
+  }
+
+  return weekDates;
+};

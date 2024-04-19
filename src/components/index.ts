@@ -9,7 +9,6 @@ import ChooseImageComponent from './ChooseImageComponent';
 import DateTimeComponent from './DateTimeComponent';
 import HeaderFilterComponent from './HeaderFillterComponent';
 import IconButtonComponent from './IconButtonComponent';
-import IconComponent from './IconComponent';
 import IconTypeComponent from './IconTypeComponent';
 import KeyboardViewComponent from './KeyboardViewComponent';
 import LineComponent from './LineComponent';
@@ -25,12 +24,10 @@ import SnackbarComponent from './SnackbarComponent';
 import SnackbarCustomComponent from './SnackbarCustomComponent';
 import TextInputComponent from './TextInputComponent';
 import ToastComponent from './ToastComponent';
-import ToastModalComponent from './ToastModalComponent';
 import TouchableOpacityComponent from './TouchableOpacityComponent';
 
 export {
   ButtonModalComponent,
-  ToastModalComponent,
   HeaderFilterComponent,
   SelectionComponent,
   DateTimeComponent,
@@ -41,7 +38,6 @@ export {
   LoadingComponent,
   PaginationListComponents,
   ModalComponent,
-  IconComponent,
   IconButtonComponent,
   TextInputComponent,
   AcctionSheetComponent,

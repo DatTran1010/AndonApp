@@ -98,6 +98,10 @@ const ItemsHome = (props: Props) => {
         navigation?.navigate('IncompleteIssues');
         break;
       }
+
+      case 'report': {
+        navigation?.navigate('ReportScreen');
+      }
     }
   };
 

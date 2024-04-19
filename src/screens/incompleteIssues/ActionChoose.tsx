@@ -1,9 +1,10 @@
-import {Alert, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Keyboard, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {
   AcctionSheetComponent,
   ButtonComponent,
   IconTypeComponent,
+  KeyboardViewComponent,
   SelectionComponent,
   SnackbarComponent,
   TextInputComponent,
@@ -31,10 +32,32 @@ const ActionChoose = (props: Props) => {
   const [hideKeyBoard, setHideKeyBoard] = React.useState(false);
   const {userName, language} = useAppSelector(state => state.app);
 
-  const formRef = React.useRef<{idnn: number; description: string}>({
+  const formRef = React.useRef<{
+    idnn: number;
+    description: string;
+    tgnm: number;
+  }>({
     idnn: -1,
     description: '',
+    tgnm: 0,
   });
+
+  const dataPendingProcessing = [
+    {
+      value: 1,
+      label: t('tiep-nhan'),
+      iconname: 'checkmark-done-circle-sharp',
+      iconcolor: 'green',
+      border: true,
+    },
+    {
+      value: 2,
+      label: t('trao-doi-thong-tin'),
+      iconname: 'chatbox-ellipses-outline',
+      iconcolor: '#2684ff',
+      border: false,
+    },
+  ];
 
   //#region  mutation , query
   const dataCboDownTime = useQuery({
@@ -49,22 +72,33 @@ const ActionChoose = (props: Props) => {
   });
   //#endregion
 
-  const dataPendingProcessing = [
-    {
-      value: 1,
-      label: 'Tiếp nhận',
-      iconname: 'checkmark-done-circle-sharp',
-      iconcolor: 'green',
-      border: true,
-    },
-    {
-      value: 2,
-      label: 'Trao đổi thông tin',
-      iconname: 'chatbox-ellipses-outline',
-      iconcolor: '#2684ff',
-      border: false,
-    },
-  ];
+  React.useEffect(() => {
+    // Hàm xử lý sự kiện khi bàn phím được mở
+    const onKeyboardDidShow = () => {
+      setHideKeyBoard(true);
+    };
+
+    // Hàm xử lý sự kiện khi bàn phím được ẩn
+    const onKeyboardDidHide = () => {
+      setHideKeyBoard(false);
+    };
+
+    // Lắng nghe sự kiện bàn phím mở và ẩn
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      onKeyboardDidShow,
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      onKeyboardDidHide,
+    );
+
+    // Cleanup: Xóa các lắng nghe sự kiện khi thành phần được gỡ bỏ
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const bottomSheetRef = React.useRef<{
     handleCloseAcctionSheet: () => void;
@@ -84,6 +118,7 @@ const ActionChoose = (props: Props) => {
       id_may: data.ID_MAY,
       id_sk: Number(idsk),
       sn_bth: data.SN_BTH,
+      tgnm: formRef.current.tgnm || 0,
     };
 
     saveActionChooseMuation.mutateAsync(propsSave, {
@@ -100,10 +135,6 @@ const ActionChoose = (props: Props) => {
   };
 
   // handle
-  const handleHideKeyBoard = () => {
-    setHideKeyBoard(prev => !prev);
-  };
-
   const handleSubmitFormDownTime = () => {
     if (formRef.current.idnn === -1) {
       showSnackbarStore(t('chua-nhap-nnnm'), 'error');
@@ -150,6 +181,8 @@ const ActionChoose = (props: Props) => {
       navigation?.navigate('InfoExChangeScreen', {
         idmay: data.ID_MAY,
         idsc: data.ID_SC,
+        msbth: data.SN_BTH,
+        msmay: data.MS_MAY + '-' + data.TEN_MAY,
       });
     }
   };
@@ -162,8 +195,8 @@ const ActionChoose = (props: Props) => {
           ? hideKeyBoard
             ? 65
             : HEIGHT_ANDROID_5_INCH // nếu những màng hình bé hơn 700px (màng hình bé hơn 5 inch)
-            ? 45
-            : 40
+            ? 55
+            : 50
           : data.TINH_TRANG === 1
           ? HEIGHT_ANDROID_5_INCH
             ? 25
@@ -202,7 +235,7 @@ const ActionChoose = (props: Props) => {
               );
             })}
         {data.TINH_TRANG === 3 && (
-          <View className="flex-1 mt-2">
+          <KeyboardViewComponent styleChildren={{flex: 1, marginTop: 4}}>
             <View className="gap-5">
               <View>
                 <SelectionComponent
@@ -226,10 +259,19 @@ const ActionChoose = (props: Props) => {
                   height={HEIGHT_TEXT_AREA}
                   multiline
                   placeholder={t('mo-ta-loi')}
-                  onFocus={handleHideKeyBoard}
-                  onBlur={handleHideKeyBoard}
                   onChangeText={value => {
                     formRef.current = {...formRef.current, description: value};
+                  }}
+                />
+              </View>
+              <View>
+                <TextInputComponent
+                  placeholder={t('thoi-gian-ngung-may')}
+                  keyboardType="numeric"
+                  number
+                  value={data.TG_NM.toString()}
+                  onChangeText={value => {
+                    formRef.current = {...formRef.current, tgnm: Number(value)};
                   }}
                 />
               </View>
@@ -240,7 +282,7 @@ const ActionChoose = (props: Props) => {
                 onPress={handleSubmitFormDownTime}
               />
             </View>
-          </View>
+          </KeyboardViewComponent>
         )}
       </View>
       {/* {dataDevices.length > 0 && (

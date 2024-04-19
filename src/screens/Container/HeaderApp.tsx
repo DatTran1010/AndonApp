@@ -11,12 +11,14 @@ import {useAppSelector} from '../../redux/Store';
 
 interface Props {
   isGoBack?: boolean;
+  title?: string;
+  screenGoBack?: 'LoginScreen' | 'HomeScreen' | 'IncompleteIssuesScreen';
 }
 
 const ios = Platform.OS === 'ios';
 
 const HeaderApp = (props: Props) => {
-  const {isGoBack = true} = props;
+  const {isGoBack = true, title = ''} = props;
   const {top} = useSafeAreaInsets();
   const userInfo = useAppSelector(state => state.app.userInfo);
 
@@ -30,7 +32,7 @@ const HeaderApp = (props: Props) => {
       ]}>
       <View style={styles.content}>
         {isGoBack && (
-          <View style={styles.goBack}>
+          <View style={styles.goBack} className="flex-1">
             <IconTypeComponent
               iconname="arrow-back-outline"
               iconsize={30}
@@ -41,22 +43,26 @@ const HeaderApp = (props: Props) => {
             />
           </View>
         )}
-        {/* <View className="bg-blue-500 flex-1">
-          <Text style={[Theme.fontBold, styles.username]}>DANH SÁCH SỰ CỐ</Text>
-        </View> */}
-        <View>
+
+        {title && title !== '' && (
+          <View className="flex-auto items-center">
+            <Text style={[Theme.fontBold, styles.username]}>{title}</Text>
+          </View>
+        )}
+        <View className={`flex-1 ${isGoBack ? 'items-end' : 'items-start'}`}>
           <Text style={[Theme.font, styles.username]}>{userInfo.HO_TEN}</Text>
         </View>
+
+        {!isGoBack && (
+          <View className="flex-1 items-end">
+            <IconTypeComponent
+              iconname="notifications-sharp"
+              iconcolor="white"
+              iconsize={ICON_SIZE}
+            />
+          </View>
+        )}
       </View>
-      {!isGoBack && (
-        <View>
-          <IconTypeComponent
-            iconname="notifications-sharp"
-            iconcolor="white"
-            iconsize={ICON_SIZE}
-          />
-        </View>
-      )}
     </View>
   );
 };

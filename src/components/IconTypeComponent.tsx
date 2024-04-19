@@ -8,6 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import Colors from '../common/Colors';
 import {TouchableOpacityProps} from 'react-native';
@@ -25,7 +26,8 @@ interface Props extends TouchableOpacityProps {
     | 'MaterialIcons'
     | 'Feather'
     | 'Fontisto'
-    | 'SimpleLineIcons';
+    | 'SimpleLineIcons'
+    | 'AntDesign';
   disabled?: boolean;
 }
 const IconTypeComponent: React.FC<Props> = ({
@@ -53,6 +55,8 @@ const IconTypeComponent: React.FC<Props> = ({
       ? Fontisto
       : type === 'SimpleLineIcons'
       ? SimpleLineIcons
+      : type === 'AntDesign'
+      ? AntDesign
       : Ionicons;
 
   return (

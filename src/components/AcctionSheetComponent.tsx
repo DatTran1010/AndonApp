@@ -11,6 +11,7 @@ import {HEIGHT_SCREEN} from '../common/Dimentions';
 import IconTypeComponent from './IconTypeComponent';
 import Colors from '../common/Colors';
 import Theme from '../common/Theme';
+import KeyboardViewComponent from './KeyboardViewComponent';
 
 interface AcctionSheetComponentProps extends BottomSheetProps {
   children: ReactNode;

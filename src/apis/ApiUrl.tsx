@@ -10,12 +10,15 @@ export default {
   },
   auth: {
     CheckinStatus: '/api/account/check-in-status',
+    Logout: '/api/account/logout',
   },
   issues: {
     GetListIssuesByUser: '/api/app/issues/get-list-issues-by-user',
     SaveActionChoose: '/api/app/issues/post-save-action-choose',
     GetListInfoExchange: '/api/app/issues/get-list-info-exchange',
     SaveInfoExchange: '/api/app/issues/post-save-info-exchange',
+    DeleteInfoExchange: '/api/app/issues/delete-info-exchange',
+    GetReportChart: '/api/app/issues/get-report-chart',
   },
   combo: {
     GetCboModel: '/web/cbo/get-cbo-model',

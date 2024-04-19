@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -20,6 +21,8 @@ import issuesService, {
   PropsSaveActionChooseType,
 } from '../../apis/issuesService';
 import InfoExChangeScreen from '../incompleteIssues/infoexchange/InfoExChangeScreen';
+import MainScreen from '../home/MainScreen';
+import ReportScreen from '../report/ReportScreen';
 
 const NavigationApp = () => {
   const Stack = createStackNavigator();
@@ -59,6 +62,20 @@ const NavigationApp = () => {
       ) {
         console.log('Đã huỷ');
         await notifee.cancelNotification(notification?.id as string);
+      }
+
+      // khi bấm vào notificaiton
+      if (type === EventType.PRESS) {
+        const dataNotification: DataNotificationType =
+          notification?.data as DataNotificationType;
+        if (dataNotification.screen === 'InfoExChangeScreen') {
+          NavigationService.navigate(dataNotification.screen, {
+            idsc: dataNotification.idsc,
+            idmay: dataNotification.idmay,
+            msbth: dataNotification.snbth,
+            msmay: dataNotification.msmay + '-' + dataNotification.tenmay,
+          });
+        }
       }
     });
 
@@ -104,11 +121,19 @@ const NavigationApp = () => {
             title: 'LoginScreen',
           }}
         />
+
+        <Stack.Screen
+          name="MainScreen"
+          component={MainScreen}
+          options={{
+            headerShown: false,
+            title: 'MainScreen',
+          }}
+        />
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
           options={{
-            // eslint-disable-next-line react/no-unstable-nested-components
             header: () => <HeaderApp isGoBack={false} />,
           }}
         />
@@ -116,7 +141,6 @@ const NavigationApp = () => {
           name="CheckInScreen"
           component={CheckInScreen}
           options={{
-            // eslint-disable-next-line react/no-unstable-nested-components
             header: () => <HeaderApp isGoBack={true} />,
           }}
         />
@@ -125,7 +149,6 @@ const NavigationApp = () => {
           name="IncompleteIssues"
           component={IncompleteIssues}
           options={{
-            // eslint-disable-next-line react/no-unstable-nested-components
             header: () => <HeaderApp isGoBack={true} />,
           }}
         />
@@ -134,10 +157,24 @@ const NavigationApp = () => {
           name="InfoExChangeScreen"
           component={InfoExChangeScreen}
           options={{
-            // eslint-disable-next-line react/no-unstable-nested-components
+            header: () => (
+              <HeaderApp
+                isGoBack={true}
+                screenGoBack="IncompleteIssuesScreen"
+              />
+            ),
+          }}
+        />
+
+        <Stack.Screen
+          name="ReportScreen"
+          component={ReportScreen}
+          options={{
             header: () => <HeaderApp isGoBack={true} />,
           }}
         />
+
+        {/* <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

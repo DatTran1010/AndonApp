@@ -14,13 +14,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Colors from '../common/Colors';
 import Theme from '../common/Theme';
-import IconComponent from './IconComponent';
 import LineComponent from './LineComponent';
 import TextInputComponent from './TextInputComponent';
 import {HEIGHT_TEXT_INPUT, ICON_SIZE} from '../common/Dimentions';
 import {setKeyWorkSearchModal} from '../redux/AppSlice';
 import OverlayComponent from './OverlayComponent';
-import ToastModalComponent from './ToastModalComponent';
+import IconTypeComponent from './IconTypeComponent';
 
 interface ModalComponentProps {
   children?: any;
@@ -91,9 +90,9 @@ const ModalComponent = (props: ModalComponentProps) => {
                 <Text style={(Theme.fontTitle, styles.title)}>{title}</Text>
               </View>
 
-              <IconComponent
-                nameicon="close"
-                size={30}
+              <IconTypeComponent
+                iconname="close"
+                iconsize={30}
                 onPress={handleCloseModal}
               />
             </View>
@@ -117,7 +116,6 @@ const ModalComponent = (props: ModalComponentProps) => {
           </View>
         </View>
       </TouchableOpacity>
-      <ToastModalComponent />
       <OverlayComponent />
     </Modal>
   );

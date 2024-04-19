@@ -146,11 +146,11 @@ export async function onDisplayNotification(
     ios: {
       categoryId: caterory === null ? '' : caterory,
       sound: 'default',
-      attachments: [
-        {
-          url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvcpGBVVzF9fKNWYFt4UrpqOaDz1vAwUafUgOSGM6Dg&s',
-        },
-      ],
+      // attachments: [
+      //   {
+      //     url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEvcpGBVVzF9fKNWYFt4UrpqOaDz1vAwUafUgOSGM6Dg&s',
+      //   },
+      // ],
     },
   });
 }

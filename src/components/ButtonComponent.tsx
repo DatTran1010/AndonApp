@@ -38,7 +38,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
       ]}
       disabled={disabled}
       {...props}>
-      <Text style={[Theme.font, styles.buttonText, {color: colorText}]}>
+      <Text style={[Theme.fontBold, styles.buttonText, {color: colorText}]}>
         {buttonTitle}
       </Text>
     </TouchableOpacity>

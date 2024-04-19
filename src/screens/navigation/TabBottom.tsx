@@ -4,18 +4,17 @@ import {View} from 'react-native';
 import Theme from '../../common/Theme';
 import TabBarButton from './TabBarButton';
 import {NavigationProp} from '@react-navigation/native';
-
-const Dashboard = () => {
-  return <View />;
-};
+import UserProfileScreen from '../userprofile/UserProfileScreen';
+import HomeScreen from '../home/HomeScreen';
+import HeaderApp from '../Container/HeaderApp';
 
 const TabArr = [
   {
-    route: 'HomeScreen',
+    route: 'Home',
     label: 'Home',
     activeIcon: 'home',
     inActiveIcon: 'home-outline',
-    component: Dashboard,
+    component: HomeScreen,
     type: 'ionicons',
   },
   {
@@ -23,7 +22,7 @@ const TabArr = [
     label: 'Chat',
     activeIcon: 'chatbubble-ellipses',
     inActiveIcon: 'chatbubble-ellipses-outline',
-    component: Dashboard,
+    component: HomeScreen,
     type: 'ionicons',
   },
   {
@@ -31,7 +30,7 @@ const TabArr = [
     label: 'Task',
     activeIcon: 'list-circle',
     inActiveIcon: 'list-circle-outline',
-    component: Dashboard,
+    component: HomeScreen,
     type: 'ionicons',
   },
   {
@@ -39,7 +38,7 @@ const TabArr = [
     label: 'User',
     activeIcon: 'user-circle-o',
     inActiveIcon: 'user-circle',
-    component: Dashboard,
+    component: UserProfileScreen,
     type: 'FontAwesome',
   },
 ];
@@ -49,13 +48,13 @@ const Tab = createBottomTabNavigator();
 type Props = {
   navigation?: NavigationProp<any, any>;
 };
-export default function TabBottom(props: Props) {
-  const {navigation} = props;
+export default function TabBottom(propsTab: Props) {
+  const {navigation} = propsTab;
   return (
-    <View>
+    <View className="flex-1">
       <Tab.Navigator
         screenOptions={{
-          headerShown: false,
+          headerShown: true,
           tabBarStyle: [
             {
               height: 60,
@@ -67,6 +66,8 @@ export default function TabBottom(props: Props) {
             },
             Theme.shadow,
           ],
+          // eslint-disable-next-line react/no-unstable-nested-components
+          header: () => <HeaderApp isGoBack={false} />,
         }}>
         {TabArr.map((item, index) => {
           return (

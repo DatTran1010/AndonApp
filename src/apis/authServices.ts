@@ -23,7 +23,6 @@ export const loginAsyn = async (props: PropsLogin) => {
       Token: props.tokenDevies,
       Platform: props.platform,
     };
-
     const params = null;
     const contenttype = 'application/json';
 
@@ -57,6 +56,13 @@ const authServicesHttp = {
     http.get<boolean>(ApiUrl.auth.CheckinStatus, {
       params: {
         username,
+      },
+    }),
+
+  logOut: (username: string) =>
+    http.post<boolean>(ApiUrl.auth.Logout, null, {
+      params: {
+        Username: username,
       },
     }),
 };

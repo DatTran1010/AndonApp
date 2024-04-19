@@ -1,5 +1,6 @@
 import axios, {AxiosResponse, AxiosError, HttpStatusCode} from 'axios';
 import {CallApiResponse} from '../src/types/CommonType';
+import {localStorage, localStorageKey} from '../src/utils';
 // import * as asyncStorageItem from '../services/asyncStorageItem';
 // import {getAccessToken, isTokenExpired} from '../src/utils';
 // import {NavigationService} from '../src/UI/Navigation';
@@ -15,26 +16,10 @@ const callApi = async <T>(
 ): Promise<CallApiResponse<T>> => {
   const controller = new AbortController();
   try {
-    // const baseURL = await asyncStorageItem.baseURL();
+    const baseURL = await localStorage.getItem(localStorageKey.BASE_URL);
+
     // const accessToken = await getAccessToken();
     const accessToken = '';
-
-    // if (checkToken) {
-    //   try {
-    //     const isCheckToken = isTokenExpired(accessToken);
-    //     if (!isCheckToken) {
-    //       // nếu đang ở 1 trang nào đó bất kỳ, thì sẽ chuyển về trang Login
-    //       NavigationService.navigate('Login');
-    //       throw new Error('Token Expired');
-    //     }
-    //   } catch (error) {
-    //     throw new Error('Token Expired');
-    //   }
-    // }
-
-    // const baseURL = 'http://103.48.193.219:1010';
-    const baseURL = 'http://192.168.2.15:7174';
-    // console.log('URL', baseURL);
     const response: AxiosResponse = await axios.request({
       baseURL: baseURL,
       timeout: 9000,

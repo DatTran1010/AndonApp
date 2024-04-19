@@ -1,12 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Formik} from 'formik';
@@ -17,6 +10,7 @@ import Colors from '../../common/Colors';
 import Theme from '../../common/Theme';
 import {
   ButtonComponent,
+  CheckboxComponent,
   KeyboardViewComponent,
   LoadingComponent,
   TextInputComponent,
@@ -24,12 +18,10 @@ import {
 import LanguesComponent from '../../components/LanguesComponent';
 import useApiMutation from '../../../services/useApiMutation';
 import {loginAsyn} from '../../apis/authServices';
-import {HttpStatusCode} from 'axios';
 import {useDispatch} from 'react-redux';
-import {setCheckinStatus, setUserInfo, setUserName} from '../../redux/AppSlice';
 import {AppDispatch} from '../../redux/Store';
-import {fetchCheckInStatus} from '../../redux/feature/auth-slice';
-import {localStorage, localStorageKey} from '../../utils';
+import {loginPress} from '../../utils/authUtils';
+import SetingConfig from './SetingConfig';
 
 interface LoginProps {
   navigation: any;
@@ -38,11 +30,12 @@ interface LoginProps {
 interface initialValuesLogin {
   username: string;
   password: string;
+  rememberme: boolean;
 }
 
 const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
   const {t} = useTranslation();
-  const dispath = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const keyResetFormik = React.useRef(Date.now());
 
   //#region  mutation
@@ -53,48 +46,62 @@ const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
 
   //#endregion
   const handleLogin = async (value: initialValuesLogin) => {
-    const tokenDevice = await localStorage.getItem(
-      localStorageKey.TOKEN_DEVICE,
+    const resultLogin = await loginPress(
+      dispatch,
+      value.password,
+      value.username,
+      value.rememberme,
     );
 
-    loginMuation.mutateAsync(
-      {
-        password: value.password,
-        username: value.username,
-        tokenDevies: tokenDevice,
-        platform: Platform.OS === 'android' ? 1 : 2,
-      },
-      {
-        onSuccess(data) {
-          if (data.StatusCode === HttpStatusCode.Ok) {
-            dispath(setUserName(value.username));
-            dispath(setUserInfo(data.ResponseData));
-            dispath(setCheckinStatus(data.ResponseData.STATUS_CHECK_IN));
+    if (resultLogin) {
+      navigation.navigate('MainScreen');
+    }
 
-            dispath(fetchCheckInStatus(value.username));
-            navigation.navigate('HomeScreen');
-          }
-        },
-      },
-    );
-    // navigation.navigate('HomeScreen');
-
-    // const {password, username} = value;
-    // const result = await LoginEnter(
-    //   {
-    //     password: password,
-    //     username: username,
-    //   },
-    //   dispatch,
+    // const tokenDevice = await localStorage.getItem(
+    //   localStorageKey.TOKEN_DEVICE,
     // );
-    // navigation.navigate('HomeScreen');
-    // if (result) {
-    // }
+
+    // loginMuation.mutateAsync(
+    //   {
+    //     password: value.password,
+    //     username: value.username,
+    //     tokenDevies: tokenDevice,
+    //     platform: Platform.OS === 'android' ? 1 : 2,
+    //   },
+    //   {
+    //     async onSuccess(data) {
+    //       if (data.StatusCode === HttpStatusCode.Ok) {
+    //         dispath(setUserName(value.username));
+    //         dispath(setUserInfo(data.ResponseData));
+    //         dispath(setCheckinStatus(data.ResponseData.STATUS_CHECK_IN));
+
+    //         dispath(fetchCheckInStatus(value.username));
+
+    //         if (value.rememberme) {
+    //           //lưu thông tin info user
+    //           await localStorage.setItem(
+    //             localStorageKey.USER_INFO,
+    //             JSON.stringify(data.ResponseData),
+    //           );
+
+    //           // lưu username
+    //           await localStorage.setItem(
+    //             localStorageKey.USER_NAME,
+    //             JSON.stringify(value.username),
+    //           );
+    //         }
+    //       }
+    //     },
+    //   },
+    // );
   };
 
   return (
     <KeyboardViewComponent styleParent={styles.container}>
       <View className="flex-1">
+        <View className="items-end pr-1 pt-1">
+          <SetingConfig />
+        </View>
         <View style={styles.headerScreen}>
           <View style={styles.viewImage}>
             <Image
@@ -121,13 +128,14 @@ const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
             initialValues={{
               username: '',
               password: '',
+              rememberme: false,
             }}
             validationSchema={yup.object().shape({
               username: yup.string().required(t('khong-duoc-trong')),
               password: yup.string().required(t('khong-duoc-trong')),
             })}
             onSubmit={values => handleLogin(values)}>
-            {({handleChange, handleSubmit, values}) => (
+            {({handleChange, handleSubmit, values, setFieldValue}) => (
               <View>
                 <View>
                   <TextInputComponent
@@ -140,6 +148,16 @@ const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
                     placeholder={t('password')}
                     secureTextEntry
                     onChangeText={handleChange('password')}
+                  />
+                </View>
+
+                <View className="items-end">
+                  <CheckboxComponent
+                    label="Lưu đăng nhập"
+                    value={values.rememberme}
+                    onPress={() => {
+                      setFieldValue('rememberme', !values.rememberme);
+                    }}
                   />
                 </View>
 

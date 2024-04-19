@@ -1,5 +1,9 @@
 import {ComboModelType, JsonRespoionseModelType} from '../types/CommonType';
-import {InCompleteIssuesType, ListInfoExchangeType} from '../types/issuesType';
+import {
+  InCompleteIssuesType,
+  ListInfoExchangeType,
+  ReportChartModelType,
+} from '../types/issuesType';
 import http from '../utils/https';
 import ApiUrl from './ApiUrl';
 
@@ -14,6 +18,7 @@ export type PropsSaveActionChooseType = {
   id_may: number;
   sn_bth: string;
   id_dd: number;
+  tgnm?: number;
 };
 
 export type PropsSaveInfoExchangeType = {
@@ -23,6 +28,15 @@ export type PropsSaveInfoExchangeType = {
   idsc: number;
   idns: number; // id nhan su
   message: string;
+};
+
+export type PropsGetReportChart = {
+  nngu: number;
+  username: string;
+  loai: number;
+  tungay: Date;
+  denngay: Date;
+  option: boolean;
 };
 
 const issuesService = {
@@ -48,12 +62,18 @@ const issuesService = {
       JSON.stringify(props),
     ),
 
-  getComboCurrentReceiver: (username: string, nngu: number, idmay: number) =>
+  getComboCurrentReceiver: (
+    username: string,
+    nngu: number,
+    idmay: number,
+    idsc: number,
+  ) =>
     http.get<ComboModelType[]>(ApiUrl.combo.GetCboCurrentReceiver, {
       params: {
         username,
         nngu,
         idmay,
+        idsc,
       },
     }),
 
@@ -83,6 +103,27 @@ const issuesService = {
         },
       },
     ),
+
+  deleteInfoExchange: (
+    props: Pick<PropsSaveInfoExchangeType, 'message' | 'nngu' | 'username'> & {
+      isimage: boolean;
+      idttt: number;
+    },
+  ) =>
+    http.delete<JsonRespoionseModelType>(ApiUrl.issues.DeleteInfoExchange, {
+      params: {
+        idttt: props.idttt,
+        linkimage: props.message,
+        nngu: props.nngu,
+        username: props.username,
+        isimage: props.isimage,
+      },
+    }),
+
+  getReportChart: (props: PropsGetReportChart) =>
+    http.get<ReportChartModelType[]>(ApiUrl.issues.GetReportChart, {
+      params: props,
+    }),
 };
 
 export default issuesService;

@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Colors from '../common/Colors';
-import IconComponent from './IconComponent';
+import IconTypeComponent from './IconTypeComponent';
 
 interface HeaderFillterComponentProps {
   childrent: any;
@@ -46,10 +46,10 @@ const HeaderFilterComponent = (props: HeaderFillterComponentProps) => {
   return (
     <>
       <Animated.View style={[styles.iconArrow, arrowAnimatedStyle]}>
-        <IconComponent
-          nameicon="chevron-down-outline"
-          colorIcon={Colors.black}
-          size={30}
+        <IconTypeComponent
+          iconname="chevron-down-outline"
+          iconcolor={Colors.black}
+          iconsize={30}
           onPress={handleShowFillControl}
           // style={styles.iconDropDown}
         />

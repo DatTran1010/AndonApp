@@ -1,16 +1,19 @@
-import {KeyboardAvoidingView, Platform, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, Text, View} from 'react-native';
 import React from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import ChooseReceiver from './ChooseReceiver';
 import {useAppSelector} from '../../../redux/Store';
 import ListMessage from './ListMessage';
 import Colors from '../../../common/Colors';
+import Theme from '../../../common/Theme';
 type Props = {
   navigation?: NavigationProp<any, any>;
-  route: {
+  route?: {
     params: {
       idsc: number;
       idmay: number;
+      msbth: string;
+      msmay: string;
     };
     // {"key": "Maintenance-d9JqteA3IDVZXvWNHzTwC",
     //  "name": "Maintenance",
@@ -33,7 +36,8 @@ const InfoExChangeScreen = (props: Props) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={86}
-      style={{flex: 1, backgroundColor: Colors.primary}}>
+      className="flex-1"
+      style={{backgroundColor: Colors.primary}}>
       {/* {dataComboCurrentReceiver.data.ResponseData.map(receiver => {
           return (
             <TouchableOpacity
@@ -63,10 +67,15 @@ const InfoExChangeScreen = (props: Props) => {
             </TouchableOpacity>
           );
         })} */}
-
+      <View className="items-center">
+        <Text style={[Theme.fontBold, {color: Colors.primarySecond}]}>
+          {route?.params.msbth + '-' + route?.params.msmay}
+        </Text>
+      </View>
       <View className="p-3">
         <ChooseReceiver
-          idmay={route.params.idmay}
+          idmay={route?.params.idmay as number}
+          idsc={route?.params.idsc as number}
           onPressSelection={handleSelectReceiver}
         />
       </View>
@@ -75,7 +84,7 @@ const InfoExChangeScreen = (props: Props) => {
           ref={listMessageRef}
           username={userName}
           language={language}
-          idsc={route.params.idsc}
+          idsc={route?.params.idsc as number}
         />
       </View>
     </KeyboardAvoidingView>

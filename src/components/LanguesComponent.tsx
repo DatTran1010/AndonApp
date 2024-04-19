@@ -32,6 +32,18 @@ const LanguesComponent: React.FC<LanguesComponentProps> = ({
 
   //sk handle
 
+  React.useEffect(() => {
+    const getLanguage = async () => {
+      const languageStorage = await localStorage.getItem(
+        localStorageKey.LANGUAGE,
+      );
+      dispatch(setLanguaApp(languageStorage === 'vn' ? 0 : 1));
+    };
+
+    getLanguage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSelectionLanguage = () => {
     setIsVisible(!isVisible);
   };
@@ -71,7 +83,7 @@ const LanguesComponent: React.FC<LanguesComponentProps> = ({
       {isVisible && (
         <AcctionSheetComponent
           ref={acctionSheetRef}
-          heightPercent={20}
+          heightPercent={25}
           onClose={() => setIsVisible(false)}
           title={t('chosse-language')}>
           <View style={{flex: 1}}>
@@ -132,6 +144,7 @@ const styles = StyleSheet.create({
   },
   chosseLanguaes: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   chosseLanguaed: {
     marginRight: 5,

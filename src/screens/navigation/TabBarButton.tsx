@@ -1,7 +1,7 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import {BottomTabBarButtonProps} from '@react-navigation/bottom-tabs';
-import Theme from '../../common/Theme';
 import Colors from '../../common/Colors';
 import {IconTypeComponent} from '../../components';
 
@@ -37,7 +37,7 @@ const TabBarButton = (props: Props) => {
         ref={viewRef}
         className="items-center"
         style={{
-          padding: 10,
+          padding: 5,
           backgroundColor: focused ? Colors.primary : Colors.white,
           borderRadius: 25,
         }}>

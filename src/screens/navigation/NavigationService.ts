@@ -8,7 +8,7 @@ function setTopLevelNavigator(navigatorRef: NavigationContainerRef<any>) {
 
 function navigate(routeName: string, params?: object) {
   const currentRoute = navigator.getCurrentRoute();
-  if (currentRoute?.name === 'Login') return;
+  if (currentRoute?.name === 'LoginScreen') return;
 
   if (navigator) {
     navigator.dispatch({
@@ -29,8 +29,12 @@ function reset(name: string, params?: object) {
 
 const goBack = () => {
   if (navigator) {
-    navigator.goBack();
+    if (navigator.canGoBack()) {
+      navigator.goBack();
+      return;
+    }
   }
+  navigate('HomeScreen');
 };
 
 // Thêm các phương thức khác nếu cần thiết, như goBack(), replace(), ...

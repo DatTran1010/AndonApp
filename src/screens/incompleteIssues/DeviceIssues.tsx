@@ -58,12 +58,21 @@ const DeviceIssues = (props: Props) => {
               <Text style={Theme.font}>{item.TG_BAT_DAU}</Text>
             </View>
           </View>
+          <View className="flex-row justify-between">
+            {item.TEN_NTN && item.TEN_NTN !== '' && (
+              <View className="flex-row gap-1">
+                <Text style={[Theme.font, {color: item.COLOR_TT}]}>
+                  {item.TEN_NTN}
+                </Text>
+              </View>
+            )}
 
-          <View className="flex-row gap-1">
-            <Text style={[Theme.font]}>{t('tinh-trang') + ':'}</Text>
-            <Text style={[Theme.font, {color: item.COLOR_TT}]}>
-              {item.TEN_TINH_TRANG}
-            </Text>
+            <View className="flex-row gap-1">
+              <Text style={[Theme.font]}>{t('tinh-trang') + ':'}</Text>
+              <Text style={[Theme.font, {color: item.COLOR_TT}]}>
+                {item.TEN_TINH_TRANG}
+              </Text>
+            </View>
           </View>
         </CardComponent>
       </Animated.View>

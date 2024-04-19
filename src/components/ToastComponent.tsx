@@ -13,20 +13,19 @@ import Animated, {
   FadeInUp,
 } from 'react-native-reanimated';
 import {PanGestureHandler} from 'react-native-gesture-handler';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-import IconComponent from './IconComponent';
 import Colors from '../common/Colors';
 import {WIDTH_SCREEN} from '../common/Dimentions';
 import Theme from '../common/Theme';
 import {setShowToast} from '../redux/AppSlice';
-import {RootState} from '../types/CommonType';
+import {useAppSelector} from '../redux/Store';
+import IconTypeComponent from './IconTypeComponent';
 
 const ToastComponent = () => {
   const dispatch = useDispatch();
-  const toastContainer = useSelector(
-    (state: RootState) => state.app.toastContainer,
-  );
+  const toastContainer = useAppSelector(state => state.app.toastContainer);
+
   // useEffect(() => {
   //   if (toastContainer.showToast) {
   //     const timer = setTimeout(() => {
@@ -175,10 +174,10 @@ const ToastComponent = () => {
             },
           ]}>
           <View style={styles.toastIcon}>
-            <IconComponent
-              nameicon={typeToast().iconName}
-              size={25}
-              colorIcon={Colors.white}
+            <IconTypeComponent
+              iconname={typeToast().iconName}
+              iconsize={25}
+              iconcolor={Colors.white}
             />
           </View>
 
@@ -210,10 +209,10 @@ const ToastComponent = () => {
               </Text>
             </View>
             <View style={styles.toastIconClose}>
-              <IconComponent
-                nameicon={'close-outline'}
-                size={25}
-                colorIcon={typeToast().color}
+              <IconTypeComponent
+                iconname={'close-outline'}
+                iconsize={25}
+                iconcolor={typeToast().color}
                 onPress={handleCloseToast}
               />
             </View>

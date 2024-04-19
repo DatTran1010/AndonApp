@@ -10,7 +10,11 @@ import {
 } from 'react-native';
 import React from 'react';
 import {t} from 'i18next';
-import {HubConnection, HubConnectionBuilder} from '@microsoft/signalr';
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  LogLevel,
+} from '@microsoft/signalr';
 
 import {IconTypeComponent, LoadingComponent} from '../../../components';
 import {useQuery} from '@tanstack/react-query';
@@ -20,6 +24,8 @@ import useApiMutation from '../../../../services/useApiMutation';
 import {showSnackbarStore} from '../../../redux/Store';
 import ChooseImage from './ChooseImage';
 import {ImageType} from '../../../types/CommonType';
+import {useFocusEffect} from '@react-navigation/native';
+import {getBaseURLFromLocalStorage} from '../../../utils/baseUrlUtils';
 
 type Props = {
   username: string;
@@ -50,28 +56,35 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
   //#endregion
 
   const updateScrollView = () => {
-    setTimeout(() => {
-      if (
-        scrollViewRef.current &&
-        listInfoExchange.data?.ResponseData &&
-        listInfoExchange.data.ResponseData.length > 0
-      ) {
-        scrollViewRef.current.scrollToIndex({index: 0, animated: true});
-      }
-    }, 100);
+    try {
+      setTimeout(() => {
+        if (
+          scrollViewRef.current &&
+          listInfoExchange.data?.ResponseData &&
+          listInfoExchange.data.ResponseData.length > 0
+        ) {
+          try {
+            scrollViewRef.current.scrollToIndex({index: 0, animated: true});
+          } catch {}
+        }
+      }, 100);
+    } catch {}
   };
 
   //connect hub
   const createHubConnection = async () => {
-    const url = 'http://192.168.2.15:7174';
+    // const url = 'http://103.48.193.219:1006';
+    // const url = 'http://192.168.2.18:7174';
+    const baseUrl = await getBaseURLFromLocalStorage();
     const hubConnectionContext = new HubConnectionBuilder()
       // .withUrl('http://192.168.2.21:7174/databieudo', {
       //   skipNegotiation: true,
       //   transport: HttpTransportType.WebSockets,
       // })
 
-      .withUrl(`${url + '/ReceiveMessage'}`)
+      .withUrl(`${baseUrl + '/ReceiveMessage'}`)
       .withAutomaticReconnect()
+      .configureLogging(LogLevel.Debug)
       .build();
     try {
       hubConnectionContext.onclose(error => {
@@ -99,9 +112,11 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
     hubConnectionRef.current = hubConnectionContext;
   };
 
-  React.useEffect(() => {
-    createHubConnection();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      createHubConnection();
+    }, []),
+  );
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -131,7 +146,11 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
   };
 
   const getListInfoExchange = async (sendSuccess: boolean) => {
-    await hubConnectionRef.current?.invoke('ReceiveMessage', idsc, sendSuccess);
+    await hubConnectionRef.current?.invoke(
+      'ReceiveMessage',
+      Number(idsc),
+      sendSuccess,
+    );
   };
 
   const listenDatasHub = () => {
@@ -141,7 +160,7 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
         hubConnectionRef.current.on(
           'ReceiveMessage',
           async (hubIdsc: number) => {
-            if (hubIdsc === idsc) {
+            if (Number(hubIdsc) === Number(idsc)) {
               // nếu người gửi trong cùng sự cố với nhau thì mới set lại value, còn không thì không set value
               await listInfoExchange.refetch();
             }
@@ -151,9 +170,9 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
     }
   };
 
-  const handleContentSizeChange = () => {
-    updateScrollView();
-  };
+  // const handleContentSizeChange = () => {
+  //   updateScrollView();
+  // };
 
   const handleChangeMessage = (value: string) => {
     messageRef.current = value;
@@ -202,6 +221,10 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
     );
   };
 
+  const handleDeleteMessageSuccess = async () => {
+    getListInfoExchange(true);
+  };
+
   return (
     <View style={styles.container}>
       {/* {listInfoExchange.isFetching ? (
@@ -233,12 +256,19 @@ const ListMessage = React.forwardRef((props: Props, ref) => {
             listInfoExchange.data.ResponseData) ||
           []
         }
-        onContentSizeChange={handleContentSizeChange}
+        // onContentSizeChange={handleContentSizeChange}
         inverted={true}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.ID_TTT.toString()}
         renderItem={({item}) => {
-          return <ItemMessage item={item} />;
+          return (
+            <ItemMessage
+              item={item}
+              language={language}
+              username={username}
+              deleteOnSuccess={handleDeleteMessageSuccess}
+            />
+          );
         }}
       />
 

@@ -75,5 +75,21 @@
   "ban-co-muon-tiep-nhan-khong": "Bạn có muốn tiếp nhận không ?",
   "ban-co-muon-luu-nguyen-nhan-dung-may": "Bạn có muốn lưu nguyên nhân dừng máy không ?",
   "nguoi-nhan": "Người nhận",
-  "gui-tin-nhan-khong-thanh-cong": "Gửi tin nhắn không thành công"
+  "gui-tin-nhan-khong-thanh-cong": "Gửi tin nhắn không thành công",
+  "ban-chua-co-tai-khoan": "Bạn chưa có tài khoản? ",
+  "dang-ky": "Đăng ký",
+  "thoi-gian-ngung-may": "Thời gian ngừng máy",
+  "tiep-nhan": "Tiếp nhận",
+  "trao-doi-thong-tin": "Trao đổi thông tin",
+  "xoa-go-bo": "Xoá gỡ bỏ",
+  "edit-profile": "Chỉnh sửa thông tin",
+  "nhap-url-api": "Nhập URL",
+  "next": "Next",
+  "nhap-url-title": "Nhập đường dẫn URL chính xác để đi đến data của bạn",
+  "theo-so-lan": "Theo số lần",
+  "theo-so-phut": "Theo số phút",
+  "cong-viec-da-thuc-hien": "Công việc đã thực hiện",
+  "week": "Tuần",
+  "chi-tiet": "Chi tiết",
+  "nguyen-nhan-ngung-may-chinh": "Nguyên nhân ngừng máy chính"
 }

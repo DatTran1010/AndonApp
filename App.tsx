@@ -29,12 +29,11 @@ const App = () => {
   // vậy ở api sẽ chia ra 2 loại gửi 1 là gửi cho android và 2 là gửi cho IOS,
   //nếu ở IOS thì gửi như bình thường, ở android thì chỉ gửi dữ liệu sau đó lên hàm setBackgroundMessageHandler gửi noti thông qua notifee để không bị gửi 2 lần
   messaging().setBackgroundMessageHandler(async remoteMessage => {
+    // console.log('remoteMessageBackground', remoteMessage);
     const dataNotification = remoteMessage.data as DataNotificationType;
 
     if (dataNotification) {
       if (dataNotification.dataOnly === true) {
-        console.log('onDisplayNotification', onDisplayNotification);
-
         // ở chế độ background, nếu data only = true có nghĩa là nếu thông báo chỉ có data không thì
         //sẽ gửi bằng notifee còn ngược lại thì sẽ gửi bằng mặc định của notification
         onDisplayNotification({

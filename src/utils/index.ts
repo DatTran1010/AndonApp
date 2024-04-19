@@ -1,10 +1,12 @@
 import {getAccessToken, isTokenExpired} from './accesstoken';
+import {checkLogin} from './authUtils';
 import {
   isValidDateTime,
   isValidDateWithNow,
   getFirstAndLastDayOfMonth,
   getDateAdd,
   getDate,
+  getWeekDates,
 } from './datetimeUtils';
 import {getInfoLogin} from './getInfoLogin';
 import localStorage from './localStorage';
@@ -26,4 +28,6 @@ export {
   getDate,
   localStorageKey,
   localStorage,
+  checkLogin,
+  getWeekDates,
 };

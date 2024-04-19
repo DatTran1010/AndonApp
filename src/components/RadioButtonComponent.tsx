@@ -24,6 +24,7 @@ const RadioButtonComponent = (props: Props) => {
       {dataRadio.map(item => {
         return (
           <TouchableOpacity
+            activeOpacity={0.8}
             disabled={selected === item.id}
             key={item.id}
             // eslint-disable-next-line react-native/no-inline-styles

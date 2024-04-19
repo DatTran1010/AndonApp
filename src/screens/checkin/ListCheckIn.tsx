@@ -15,6 +15,7 @@ const ListCheckIn = (props: Props) => {
     return (
       <View className="flex-1">
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={dataMayCheckin}
           keyExtractor={item => item.ID_CIOM.toString()}
           renderItem={({item}) => {

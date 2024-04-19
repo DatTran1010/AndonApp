@@ -19,6 +19,8 @@ export interface InCompleteIssuesType {
   COLOR_TT: string;
   MS_MAY: string;
   TEN_TINH_TRANG: string;
+  TG_NM: number;
+  TEN_NTN: string;
 }
 
 export interface ListInfoExchangeType {
@@ -49,4 +51,9 @@ export interface ResultSaveInfoExchange {
   USERNAME: string;
   ID_DD: string;
   ID_SC: string;
+}
+
+export interface ReportChartModelType {
+  CHART_LABEL: string;
+  CHART_VALUE: number;
 }

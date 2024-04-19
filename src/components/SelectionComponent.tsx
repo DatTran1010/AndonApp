@@ -10,12 +10,9 @@ import {
   View,
 } from 'react-native';
 import React, {forwardRef, memo, useEffect, useRef, useState} from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import TextInputComponent from './TextInputComponent';
 import Colors from '../common/Colors';
-import IconComponent from './IconComponent';
 import Theme from '../common/Theme';
 import {
   HEIGHT_TEXT_INPUT,
@@ -25,6 +22,7 @@ import {
 // import QRCodeComponent from './QRCodeComponent';
 import PaginationListComponents from './PaginationListComponents';
 import NoneDataComponent from './NoneDataComponent';
+import IconTypeComponent from './IconTypeComponent';
 
 interface DataProps {
   id: number;
@@ -239,10 +237,11 @@ const SelectionComponent: React.FC<SelectionComponentProps> = forwardRef(
                       </Text>
 
                       {valueDisabled.includes(item[valueField]) && (
-                        <MaterialCommunityIcons
-                          name="cancel"
-                          size={ICON_SIZE * 1.5}
-                          color={'red'}
+                        <IconTypeComponent
+                          type="MaterialCommunityIcons"
+                          iconname="cancel"
+                          iconsize={ICON_SIZE * 1.5}
+                          iconcolor="red"
                         />
                       )}
                     </View>
@@ -314,7 +313,10 @@ const SelectionComponent: React.FC<SelectionComponentProps> = forwardRef(
               </Text>
               {isArrow && (
                 <View style={styles.iconDropDown}>
-                  <Ionicons name="chevron-down-outline" size={20} />
+                  <IconTypeComponent
+                    iconname="chevron-down-outline"
+                    iconsize={20}
+                  />
                 </View>
               )}
             </View>
@@ -330,11 +332,10 @@ const SelectionComponent: React.FC<SelectionComponentProps> = forwardRef(
             <SafeAreaView style={[styles.selectionContainer]}>
               <View style={styles.searchControl}>
                 <View style={styles.iconBack}>
-                  <IconComponent
-                    nameicon="chevron-back"
-                    size={25}
-                    colorIcon={Colors.black}
-                    label="Back"
+                  <IconTypeComponent
+                    iconname="chevron-back"
+                    iconsize={25}
+                    iconcolor={Colors.black}
                     onPress={handleSelection}
                   />
                 </View>

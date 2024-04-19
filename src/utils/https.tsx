@@ -6,6 +6,7 @@ import axios, {
 } from 'axios';
 import {ApiResponse} from '../types/CommonType';
 import {showSnackbarStore} from '../redux/Store';
+import {getBaseURLFromLocalStorage} from './baseUrlUtils';
 
 // Định nghĩa interface cho các loại lỗi
 interface CustomError extends ApiResponse<null> {
@@ -17,7 +18,7 @@ class Http {
   private instance: AxiosInstance;
   constructor() {
     this.instance = axios.create({
-      baseURL: 'http://192.168.2.15:7174', //http://192.168.100.19:7174/ NEXT_PUBLIC_API_URL
+      baseURL: '', //http://103.48.193.219:1006 NEXT_PUBLIC_API_URL
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +55,6 @@ class Http {
 
     // Có phản hồi từ máy chủ, nhưng nó không thành công (vd: mã lỗi HTTP không phải 2xx)
 
-    console.log('error.response', error.response);
     if (error.response) {
       let responseCode = error.response.data.StatusCode;
       let responseMessage = error.response.data.Message;
@@ -69,7 +69,15 @@ class Http {
           'Server Error ' + error.response.status.toString(),
           'error',
         );
+      } else if (error.response.status === 401) {
+        // lỗi token
+        showSnackbarStore(
+          'Token expired ' + error.response.status.toString(),
+          'error',
+        );
       }
+
+      console.log('error.response.status', error.response.status);
 
       return Promise.reject({
         code: responseCode,
@@ -94,12 +102,17 @@ class Http {
   }
 
   // Phương thức gửi yêu cầu GET
-  public get<T>(
+  public async get<T>(
     url: string,
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
+    const baseURL = await getBaseURLFromLocalStorage();
+
     return this.instance
-      .get<ApiResponse<T>>(url, options)
+      .get<ApiResponse<T>>(url, {
+        ...options,
+        baseURL,
+      })
       .then(response => response.data)
       .catch((error: AxiosError<CustomError>) => {
         const errorResponse: ApiResponse<T> = {
@@ -114,13 +127,17 @@ class Http {
   }
 
   // Phương thức gửi yêu cầu POST
-  public post<T>(
+  public async post<T>(
     url: string,
     data: any,
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
+    const baseURL = await getBaseURLFromLocalStorage();
     return this.instance
-      .post<ApiResponse<T>>(url, data, options)
+      .post<ApiResponse<T>>(url, data, {
+        ...options,
+        baseURL,
+      })
       .then(response => response.data)
       .catch((error: AxiosError<CustomError>) => {
         const errorResponse: ApiResponse<T> = {
@@ -135,12 +152,17 @@ class Http {
   }
 
   // Phương thức gửi yêu cầu DELETE
-  public delete<T>(
+  public async delete<T>(
     url: string,
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
+    const baseURL = await getBaseURLFromLocalStorage();
+
     return this.instance
-      .delete<ApiResponse<T>>(url, options)
+      .delete<ApiResponse<T>>(url, {
+        ...options,
+        baseURL,
+      })
       .then(response => response.data)
       .catch((error: AxiosError<CustomError>) => {
         const errorResponse: ApiResponse<T> = {

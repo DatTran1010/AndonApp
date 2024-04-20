@@ -1,6 +1,6 @@
 import {Platform} from 'react-native';
 import {loginAsyn} from '../apis/authServices';
-import {UserProfileType} from '../types/CommonType';
+import {RefreshTokenType, UserProfileType} from '../types/CommonType';
 import localStorage from './localStorage';
 import {localStorageKey} from './localStorageKey';
 import {HttpStatusCode} from 'axios';
@@ -41,6 +41,23 @@ export const loginPress = async (
     if (resultLogin.StatusCode === HttpStatusCode.Ok) {
       dispatch(setUserName(username));
       dispatch(setUserInfo(resultLogin.ResponseData));
+
+      const {ExpiresRefreshToken, RefreshToken} = resultLogin.ResponseData;
+      const infoRefreshToken: RefreshTokenType = {
+        refreshToken: RefreshToken,
+        expires: ExpiresRefreshToken,
+      };
+
+      await localStorage.setItem(
+        localStorageKey.TOKEN_LOGIN,
+        resultLogin.ResponseData.TOKEN || '',
+      );
+
+      await localStorage.setItem(
+        localStorageKey.REFRESH_TOKEN,
+        JSON.stringify(infoRefreshToken),
+      );
+
       dispatch(setCheckinStatus(resultLogin.ResponseData.STATUS_CHECK_IN));
       dispatch(fetchCheckInStatus(username as string));
 

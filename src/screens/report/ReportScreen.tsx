@@ -5,6 +5,7 @@ import WorkHasFinished from './WorkHasFinished';
 import {globalStyles} from '../../styles/globalStyles';
 import {useAppSelector} from '../../redux/Store';
 import DownTimeCause from './DownTimeCause';
+import FaultyMachine from './FaultyMachine';
 
 const ReportScreen = () => {
   const {userName, language} = useAppSelector(state => state.app);
@@ -30,6 +31,13 @@ const ReportScreen = () => {
               username={userName}
             />
             <DownTimeCause
+              denngay={fromToDate.toDate}
+              tungay={fromToDate.fromDate}
+              language={language}
+              username={userName}
+            />
+
+            <FaultyMachine
               denngay={fromToDate.toDate}
               tungay={fromToDate.fromDate}
               language={language}

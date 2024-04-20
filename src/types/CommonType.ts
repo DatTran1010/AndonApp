@@ -13,6 +13,8 @@ export interface UserProfileType {
   TEN_VAI_TRO: string | null;
   Res: number | null;
   PASSWORD: string | null;
+  RefreshToken?: string;
+  ExpiresRefreshToken?: Date;
 }
 
 export interface ApiResponse<T> {
@@ -251,4 +253,9 @@ export interface ImageType {
   uri: string | undefined;
   type?: string;
   name?: string;
+}
+
+export interface RefreshTokenType {
+  refreshToken?: string;
+  expires?: Date;
 }

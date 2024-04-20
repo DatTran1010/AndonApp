@@ -7,6 +7,7 @@ import axios, {
 import {ApiResponse} from '../types/CommonType';
 import {showSnackbarStore} from '../redux/Store';
 import {getBaseURLFromLocalStorage} from './baseUrlUtils';
+import {getAccessToken, isTokenExpired} from './accesstoken';
 
 // Định nghĩa interface cho các loại lỗi
 interface CustomError extends ApiResponse<null> {
@@ -107,9 +108,15 @@ class Http {
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
     const baseURL = await getBaseURLFromLocalStorage();
+    const accessToken = await getAccessToken();
+    const isTokenExpires = isTokenExpired(accessToken);
 
+    console.log('isTokenExpires', isTokenExpires);
     return this.instance
       .get<ApiResponse<T>>(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         ...options,
         baseURL,
       })
@@ -133,8 +140,13 @@ class Http {
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
     const baseURL = await getBaseURLFromLocalStorage();
+    const accessToken = await getAccessToken();
+
     return this.instance
       .post<ApiResponse<T>>(url, data, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         ...options,
         baseURL,
       })
@@ -157,9 +169,13 @@ class Http {
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
     const baseURL = await getBaseURLFromLocalStorage();
+    const accessToken = await getAccessToken();
 
     return this.instance
       .delete<ApiResponse<T>>(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         ...options,
         baseURL,
       })

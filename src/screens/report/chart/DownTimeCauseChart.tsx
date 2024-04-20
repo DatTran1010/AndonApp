@@ -22,7 +22,7 @@ const DownTimeCauseChart = (props: Props) => {
         const maxValue = item.CHART_VALUE === MAX_VALUE;
         const countZero = item.CHART_VALUE === 0;
         return (
-          <View key={index}>
+          <View className="items-center" key={index}>
             <View
               style={[
                 {

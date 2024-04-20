@@ -8,7 +8,7 @@ import Theme from '../../../common/Theme';
 type Props = {
   data: ReportChartModelType[];
 };
-const WorkHasFinishedChart = (props: Props) => {
+const FaultyMachineChart = (props: Props) => {
   const {data} = props;
 
   const chartValues = data.map(item => item.CHART_VALUE);
@@ -68,7 +68,7 @@ const WorkHasFinishedChart = (props: Props) => {
   );
 };
 
-export default WorkHasFinishedChart;
+export default FaultyMachineChart;
 
 const styles = StyleSheet.create({
   chart: {

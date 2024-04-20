@@ -1,10 +1,12 @@
 // import { jwtDecode } from 'jwt-decode';
 
 import localStorage from './localStorage';
+import {localStorageKey} from './localStorageKey';
+var base64 = require('base-64');
 
 export const getAccessToken = async () => {
   try {
-    const accessToken = (await localStorage.getItem('AccessToken')) as string;
+    const accessToken = await localStorage.getItem(localStorageKey.TOKEN_LOGIN);
 
     return accessToken;
   } catch (error) {
@@ -18,10 +20,13 @@ export const isTokenExpired = (token: string) => {
     if (!token || token === '') {
       return false;
     } // Nếu không có token, coi như token đã hết hạn
-    // const decodedToken = jwtDecode(token);
-    // const currentTime = Date.now() / 1000; // Chia 1000 để chuyển đổi sang giây
-    // return (decodedToken.exp as number) > currentTime;
-    return true;
+
+    const [, endcodePayLoad] = token?.split('.');
+
+    const dataToken = JSON.parse(base64.decode(endcodePayLoad));
+
+    const currentTime = Date.now() / 1000; // Chia 1000 để chuyển đổi sang giây
+    return (dataToken.exp as number) > currentTime;
   } catch (error) {
     console.log('errorToken', error);
     return false;

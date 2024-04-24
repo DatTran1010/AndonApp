@@ -23,6 +23,10 @@ import issuesService, {
 import InfoExChangeScreen from '../incompleteIssues/infoexchange/InfoExChangeScreen';
 import MainScreen from '../home/MainScreen';
 import ReportScreen from '../report/ReportScreen';
+import ReportDetailScreen from '../report/details/ReportDetailScreen';
+import EditProfileScreen from '../userprofile/EditProfileScreen';
+import ChangePassWordScreen from '../userprofile/ChangePassWordScreen';
+import {t} from 'i18next';
 
 const NavigationApp = () => {
   const Stack = createStackNavigator();
@@ -171,6 +175,32 @@ const NavigationApp = () => {
           component={ReportScreen}
           options={{
             header: () => <HeaderApp isGoBack={true} />,
+          }}
+        />
+
+        <Stack.Screen
+          name="ReportDetailScreen"
+          component={ReportDetailScreen}
+          options={{
+            header: () => <HeaderApp isGoBack={true} />,
+          }}
+        />
+
+        <Stack.Screen
+          name="EditProfileScreen"
+          component={EditProfileScreen}
+          options={{
+            header: () => <HeaderApp isGoBack={true} title="Edit Profile" />,
+          }}
+        />
+
+        <Stack.Screen
+          name="ChangePassWordScreen"
+          component={ChangePassWordScreen}
+          options={{
+            header: () => (
+              <HeaderApp isGoBack={true} title={t('doi-mat-khau')} />
+            ),
           }}
         />
 

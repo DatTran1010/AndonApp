@@ -35,7 +35,7 @@ const LanguesComponent: React.FC<LanguesComponentProps> = ({
   React.useEffect(() => {
     const getLanguage = async () => {
       const languageStorage = await localStorage.getItem(
-        localStorageKey.LANGUAGE,
+        localStorageKey.LANGUAGE || 'vn',
       );
       dispatch(setLanguaApp(languageStorage === 'vn' ? 0 : 1));
     };

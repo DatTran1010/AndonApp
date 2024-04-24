@@ -57,3 +57,18 @@ export interface ReportChartModelType {
   CHART_LABEL: string;
   CHART_VALUE: number;
 }
+
+export interface ReportChartDetailsModel {
+  PARENT_LABEL: string;
+  TG_BAT_DAU: string | null;
+  MS_MAY: string | null;
+  SN_BTH: string | null;
+  MO_TA_LOI: string | null;
+  TEN_NNNM: string | null;
+  THOI_GIAN_XL: number | null;
+}
+
+export interface ReportChartDetailsMainModel {
+  PARENT_LABEL: string;
+  ListDetail: ReportChartDetailsModel[];
+}

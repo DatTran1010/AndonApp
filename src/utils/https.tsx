@@ -7,7 +7,10 @@ import axios, {
 import {ApiResponse} from '../types/CommonType';
 import {showSnackbarStore} from '../redux/Store';
 import {getBaseURLFromLocalStorage} from './baseUrlUtils';
-import {getAccessToken, isTokenExpired} from './accesstoken';
+import {fetchRefreshToken, getAccessToken, isTokenExpired} from './accesstoken';
+import localStorage from './localStorage';
+import {localStorageKey} from './localStorageKey';
+import {NavigationService} from '../screens/navigation';
 
 // Định nghĩa interface cho các loại lỗi
 interface CustomError extends ApiResponse<null> {
@@ -76,6 +79,7 @@ class Http {
           'Token expired ' + error.response.status.toString(),
           'error',
         );
+        NavigationService.navigate('LoginScreen');
       }
 
       console.log('error.response.status', error.response.status);
@@ -108,10 +112,25 @@ class Http {
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
     const baseURL = await getBaseURLFromLocalStorage();
-    const accessToken = await getAccessToken();
+    let accessToken = await getAccessToken();
     const isTokenExpires = isTokenExpired(accessToken);
 
-    console.log('isTokenExpires', isTokenExpires);
+    // nếu token hết hạn
+    if (!isTokenExpires) {
+      // thì gọi lại api refresh token
+      const resultToken = await fetchRefreshToken(baseURL);
+
+      // kiểm tra nếu nhận được token
+      if (!resultToken.IsUnauthorized) {
+        //set lại token cho request đang thực hiện
+        accessToken = resultToken.NewToken;
+        await localStorage.setItem(
+          localStorageKey.TOKEN_LOGIN,
+          resultToken.NewToken,
+        );
+      }
+    }
+
     return this.instance
       .get<ApiResponse<T>>(url, {
         headers: {
@@ -140,7 +159,24 @@ class Http {
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
     const baseURL = await getBaseURLFromLocalStorage();
-    const accessToken = await getAccessToken();
+    let accessToken = await getAccessToken();
+    const isTokenExpires = isTokenExpired(accessToken);
+
+    // nếu token hết hạn
+    if (!isTokenExpires) {
+      // thì gọi lại api refresh token
+      const resultToken = await fetchRefreshToken(baseURL);
+
+      // kiểm tra nếu nhận được token
+      if (!resultToken.IsUnauthorized) {
+        //set lại token cho request đang thực hiện
+        accessToken = resultToken.NewToken;
+        await localStorage.setItem(
+          localStorageKey.TOKEN_LOGIN,
+          resultToken.NewToken,
+        );
+      }
+    }
 
     return this.instance
       .post<ApiResponse<T>>(url, data, {
@@ -169,7 +205,24 @@ class Http {
     options?: AxiosRequestConfig<any> | undefined,
   ): Promise<ApiResponse<T>> {
     const baseURL = await getBaseURLFromLocalStorage();
-    const accessToken = await getAccessToken();
+    let accessToken = await getAccessToken();
+    const isTokenExpires = isTokenExpired(accessToken);
+
+    // nếu token hết hạn
+    if (!isTokenExpires) {
+      // thì gọi lại api refresh token
+      const resultToken = await fetchRefreshToken(baseURL);
+
+      // kiểm tra nếu nhận được token
+      if (!resultToken.IsUnauthorized) {
+        //set lại token cho request đang thực hiện
+        accessToken = resultToken.NewToken;
+        await localStorage.setItem(
+          localStorageKey.TOKEN_LOGIN,
+          resultToken.NewToken,
+        );
+      }
+    }
 
     return this.instance
       .delete<ApiResponse<T>>(url, {

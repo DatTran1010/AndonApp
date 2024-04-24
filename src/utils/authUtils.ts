@@ -58,6 +58,12 @@ export const loginPress = async (
         JSON.stringify(infoRefreshToken),
       );
 
+      // lưu username
+      await localStorage.setItem(
+        localStorageKey.USER_NAME,
+        JSON.stringify(username),
+      );
+
       dispatch(setCheckinStatus(resultLogin.ResponseData.STATUS_CHECK_IN));
       dispatch(fetchCheckInStatus(username as string));
 
@@ -66,12 +72,6 @@ export const loginPress = async (
         await localStorage.setItem(
           localStorageKey.USER_INFO,
           JSON.stringify(resultLogin.ResponseData),
-        );
-
-        // lưu username
-        await localStorage.setItem(
-          localStorageKey.USER_NAME,
-          JSON.stringify(username),
         );
       }
 

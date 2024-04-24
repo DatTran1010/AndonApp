@@ -11,6 +11,7 @@ export default {
   auth: {
     CheckinStatus: '/api/account/check-in-status',
     Logout: '/api/account/logout',
+    ChangePassword: '/api/account/change-password',
   },
   issues: {
     GetListIssuesByUser: '/api/app/issues/get-list-issues-by-user',
@@ -19,6 +20,7 @@ export default {
     SaveInfoExchange: '/api/app/issues/post-save-info-exchange',
     DeleteInfoExchange: '/api/app/issues/delete-info-exchange',
     GetReportChart: '/api/app/issues/get-report-chart',
+    GetReportChartDetails: '/api/app/issues/get-report-chart-details',
   },
   combo: {
     GetCboModel: '/web/cbo/get-cbo-model',

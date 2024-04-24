@@ -2,6 +2,7 @@ import {ComboModelType, JsonRespoionseModelType} from '../types/CommonType';
 import {
   InCompleteIssuesType,
   ListInfoExchangeType,
+  ReportChartDetailsMainModel,
   ReportChartModelType,
 } from '../types/issuesType';
 import http from '../utils/https';
@@ -124,6 +125,14 @@ const issuesService = {
     http.get<ReportChartModelType[]>(ApiUrl.issues.GetReportChart, {
       params: props,
     }),
+
+  getReportChartDetails: (props: Omit<PropsGetReportChart, 'option'>) =>
+    http.get<ReportChartDetailsMainModel[]>(
+      ApiUrl.issues.GetReportChartDetails,
+      {
+        params: props,
+      },
+    ),
 };
 
 export default issuesService;

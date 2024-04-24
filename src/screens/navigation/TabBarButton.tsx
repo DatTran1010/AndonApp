@@ -38,13 +38,12 @@ const TabBarButton = (props: Props) => {
         className="items-center"
         style={{
           padding: 5,
-          backgroundColor: focused ? Colors.primary : Colors.white,
           borderRadius: 25,
         }}>
         <IconTypeComponent
           type={item.type}
-          iconname={item.inActiveIcon}
-          iconcolor={focused ? Colors.white : Colors.primary}
+          iconname={focused ? item.activeIcon : item.inActiveIcon}
+          iconcolor={Colors.primary}
         />
         {/* <Text
           style={[

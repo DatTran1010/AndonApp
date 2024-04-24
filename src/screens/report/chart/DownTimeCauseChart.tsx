@@ -4,6 +4,7 @@ import React from 'react';
 import {ReportChartModelType} from '../../../types/issuesType';
 import Colors from '../../../common/Colors';
 import Theme from '../../../common/Theme';
+import Animated, {FadeIn} from 'react-native-reanimated';
 
 type Props = {
   data: ReportChartModelType[];
@@ -16,7 +17,9 @@ const DownTimeCauseChart = (props: Props) => {
   const MAX_VALUE = Math.max(...chartValues);
 
   return (
-    <View className="flex-row justify-between mt-5">
+    <Animated.View
+      className="flex-row justify-between mt-5"
+      entering={FadeIn.duration(1000)}>
       {data.map((item, index) => {
         const value = 75 - (item.CHART_VALUE / MAX_VALUE) * 75;
         const maxValue = item.CHART_VALUE === MAX_VALUE;
@@ -64,7 +67,7 @@ const DownTimeCauseChart = (props: Props) => {
           </View>
         );
       })}
-    </View>
+    </Animated.View>
   );
 };
 

@@ -22,6 +22,7 @@ import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../redux/Store';
 import {loginPress} from '../../utils/authUtils';
 import SetingConfig from './SetingConfig';
+import {localStorage, localStorageKey} from '../../utils';
 
 interface LoginProps {
   navigation: any;
@@ -44,6 +45,16 @@ const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
     mutationFn: loginAsyn,
   });
 
+  React.useEffect(() => {
+    const deleteStorage = async () => {
+      await localStorage.deleteItem(localStorageKey.REFRESH_TOKEN);
+      await localStorage.deleteItem(localStorageKey.TOKEN_LOGIN);
+      await localStorage.deleteItem(localStorageKey.USER_INFO);
+      await localStorage.deleteItem(localStorageKey.USER_NAME);
+    };
+    deleteStorage();
+  }, []);
+
   //#endregion
   const handleLogin = async (value: initialValuesLogin) => {
     const resultLogin = await loginPress(
@@ -56,44 +67,6 @@ const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
     if (resultLogin) {
       navigation.navigate('MainScreen');
     }
-
-    // const tokenDevice = await localStorage.getItem(
-    //   localStorageKey.TOKEN_DEVICE,
-    // );
-
-    // loginMuation.mutateAsync(
-    //   {
-    //     password: value.password,
-    //     username: value.username,
-    //     tokenDevies: tokenDevice,
-    //     platform: Platform.OS === 'android' ? 1 : 2,
-    //   },
-    //   {
-    //     async onSuccess(data) {
-    //       if (data.StatusCode === HttpStatusCode.Ok) {
-    //         dispath(setUserName(value.username));
-    //         dispath(setUserInfo(data.ResponseData));
-    //         dispath(setCheckinStatus(data.ResponseData.STATUS_CHECK_IN));
-
-    //         dispath(fetchCheckInStatus(value.username));
-
-    //         if (value.rememberme) {
-    //           //lưu thông tin info user
-    //           await localStorage.setItem(
-    //             localStorageKey.USER_INFO,
-    //             JSON.stringify(data.ResponseData),
-    //           );
-
-    //           // lưu username
-    //           await localStorage.setItem(
-    //             localStorageKey.USER_NAME,
-    //             JSON.stringify(value.username),
-    //           );
-    //         }
-    //       }
-    //     },
-    //   },
-    // );
   };
 
   return (

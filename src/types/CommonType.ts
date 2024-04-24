@@ -259,3 +259,8 @@ export interface RefreshTokenType {
   refreshToken?: string;
   expires?: Date;
 }
+
+export interface ResponseCheckTokenModel {
+  IsUnauthorized: boolean;
+  NewToken: string;
+}

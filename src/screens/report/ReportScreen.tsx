@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import React from 'react';
 import HeaderFilter from './HeaderFilter';
 import WorkHasFinished from './WorkHasFinished';
@@ -6,8 +6,13 @@ import {globalStyles} from '../../styles/globalStyles';
 import {useAppSelector} from '../../redux/Store';
 import DownTimeCause from './DownTimeCause';
 import FaultyMachine from './FaultyMachine';
+import {NavigationProp} from '@react-navigation/native';
 
-const ReportScreen = () => {
+type Props = {
+  navigation?: NavigationProp<any, any>;
+};
+const ReportScreen = (props: Props) => {
+  const {navigation} = props;
   const {userName, language} = useAppSelector(state => state.app);
 
   const [fromToDate, setFromToDate] = React.useState<{
@@ -29,12 +34,14 @@ const ReportScreen = () => {
               tungay={fromToDate.fromDate}
               language={language}
               username={userName}
+              navigation={navigation}
             />
             <DownTimeCause
               denngay={fromToDate.toDate}
               tungay={fromToDate.fromDate}
               language={language}
               username={userName}
+              navigation={navigation}
             />
 
             <FaultyMachine
@@ -42,6 +49,7 @@ const ReportScreen = () => {
               tungay={fromToDate.fromDate}
               language={language}
               username={userName}
+              navigation={navigation}
             />
           </>
         )}
@@ -69,5 +77,3 @@ const ReportScreen = () => {
 };
 
 export default ReportScreen;
-
-const styles = StyleSheet.create({});

@@ -5,17 +5,18 @@ import {
   AcctionSheetComponent,
   ButtonComponent,
   IconTypeComponent,
-  KeyboardViewComponent,
   TextInputComponent,
 } from '../../components';
 import {t} from 'i18next';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Colors from '../../common/Colors';
 import Theme from '../../common/Theme';
+import {HEIGHT_IPHONE_PROMAX} from '../../common/Dimentions';
 
 const SetingConfig = () => {
   const [showOption, setShowOption] = React.useState(false);
   const [baseURL, setBaseURL] = React.useState('');
+  const [focus, setFocus] = React.useState(false);
   const {top} = useSafeAreaInsets();
   const timeoutRef = React.useRef<NodeJS.Timeout>();
   const bottomSheetRef = React.useRef<{
@@ -45,11 +46,12 @@ const SetingConfig = () => {
 
     timeoutRef.current = setTimeout(() => {
       setBaseURL(value);
-    }, 1000);
+    }, 500);
   };
 
   const handleSaveBaseURL = async () => {
     await localStorage.setItem(localStorageKey.BASE_URL, baseURL);
+    setFocus(false);
     bottomSheetRef.current?.handleCloseAcctionSheet();
   };
 
@@ -66,34 +68,37 @@ const SetingConfig = () => {
       {showOption && (
         <AcctionSheetComponent
           ref={bottomSheetRef}
-          heightPercent={55}
+          heightPercent={focus ? 60 : HEIGHT_IPHONE_PROMAX ? 25 : 35}
           onClose={() => {
             handleShowOption();
-          }}
-          title={t('nhap-url-api')}>
-          <KeyboardViewComponent>
-            <View className="flex-1">
-              <Text style={[Theme.font, {fontSize: 16, color: Colors.primary}]}>
-                {t('nhap-url-title')}
-              </Text>
+          }}>
+          <View className="mb-4">
+            <Text style={[Theme.font, {fontSize: 16, color: Colors.primary}]}>
+              {t('nhap-url-title')}
+            </Text>
+          </View>
+          <View className="flex-1 gap-3">
+            <View>
+              <TextInputComponent
+                placeholder="URL"
+                value={baseURL}
+                onChangeText={handleChangeBaseURL}
+                onFocus={() => {
+                  setFocus(true);
+                }}
+                onBlur={() => {
+                  setFocus(false);
+                }}
+              />
             </View>
-            <View className="flex-1 gap-3">
-              <View>
-                <TextInputComponent
-                  placeholder="URL"
-                  value={baseURL}
-                  onChangeText={handleChangeBaseURL}
-                />
-              </View>
-              <View style={{borderColor: Colors.primarySecond}}>
-                <ButtonComponent
-                  disabled={baseURL === ''}
-                  buttonTitle={t('next')}
-                  onPress={handleSaveBaseURL}
-                />
-              </View>
+            <View style={{borderColor: Colors.primarySecond}}>
+              <ButtonComponent
+                disabled={baseURL === ''}
+                buttonTitle={t('next')}
+                onPress={handleSaveBaseURL}
+              />
             </View>
-          </KeyboardViewComponent>
+          </View>
         </AcctionSheetComponent>
       )}
     </View>

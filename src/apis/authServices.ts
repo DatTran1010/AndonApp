@@ -65,6 +65,14 @@ const authServicesHttp = {
         Username: username,
       },
     }),
+
+  changePassword: (username: string, password: string) =>
+    http.post<boolean>(ApiUrl.auth.ChangePassword, null, {
+      params: {
+        username,
+        password,
+      },
+    }),
 };
 
 export default authServicesHttp;

@@ -5,7 +5,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Colors from '../../common/Colors';
 import Theme from '../../common/Theme';
 import {IconTypeComponent} from '../../components';
-import {ICON_SIZE} from '../../common/Dimentions';
 import {NavigationService} from '../navigation';
 import {useAppSelector} from '../../redux/Store';
 
@@ -45,23 +44,16 @@ const HeaderApp = (props: Props) => {
         )}
 
         {title && title !== '' && (
-          <View className="flex-auto items-center">
-            <Text style={[Theme.fontBold, styles.username]}>{title}</Text>
-          </View>
+          <>
+            {!isGoBack && <View className="flex-1" />}
+            <View className="flex-auto items-center">
+              <Text style={[Theme.fontBold, styles.username]}>{title}</Text>
+            </View>
+          </>
         )}
         <View className={`flex-1 ${isGoBack ? 'items-end' : 'items-start'}`}>
           <Text style={[Theme.font, styles.username]}>{userInfo.HO_TEN}</Text>
         </View>
-
-        {!isGoBack && (
-          <View className="flex-1 items-end">
-            <IconTypeComponent
-              iconname="notifications-sharp"
-              iconcolor="white"
-              iconsize={ICON_SIZE}
-            />
-          </View>
-        )}
       </View>
     </View>
   );

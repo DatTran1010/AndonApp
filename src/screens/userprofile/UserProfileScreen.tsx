@@ -44,6 +44,13 @@ const UserProfileScreen = (props: Props) => {
     });
   };
 
+  const handleEditProfile = () => {
+    navigation?.navigate('EditProfileScreen');
+  };
+
+  const handleChangePassWord = () => {
+    navigation?.navigate('ChangePassWordScreen');
+  };
   return (
     <View style={globalStyles.container}>
       <View style={styles.header}>
@@ -60,6 +67,7 @@ const UserProfileScreen = (props: Props) => {
         <ButtonComponent
           buttonTitle={t('edit-profile')}
           colorButton={Colors.info}
+          onPress={handleEditProfile}
         />
       </View>
       <View className="flex-1 gap-5">
@@ -82,6 +90,18 @@ const UserProfileScreen = (props: Props) => {
           </View>
           <LanguesComponent />
         </View>
+
+        <TouchableOpacity
+          onPress={handleChangePassWord}
+          activeOpacity={0.8}
+          className="flex-row items-center justify-between">
+          <View className="flex-row items-center gap-3">
+            <View className="bg-orange-100 rounded-md items-center justify-center h-10 w-10">
+              <IconTypeComponent iconname="locked" type="Fontisto" />
+            </View>
+            <Text style={Theme.font}>{t('doi-mat-khau')}</Text>
+          </View>
+        </TouchableOpacity>
 
         <TouchableOpacity
           onPress={handleLogout}

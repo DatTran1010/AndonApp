@@ -15,10 +15,6 @@ type Props = {
       msbth: string;
       msmay: string;
     };
-    // {"key": "Maintenance-d9JqteA3IDVZXvWNHzTwC",
-    //  "name": "Maintenance",
-    //  "params": {"MS_MAY": "KEPN-006", "flag": 0, "msyc": "-1"},
-    //   "path": undefined}
   };
 };
 

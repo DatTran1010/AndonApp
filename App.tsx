@@ -23,71 +23,74 @@ import issuesService, {
 const App = () => {
   const queryClient = new QueryClient();
 
-  // nếu IOS. muốn chạy vào hàm này thì phải đặt biến contentAvailable = true trên api send, và không được đính kèm notification chỉ gửi data
-  // và trên thiết bị di động phải mở chế độ làm mới ứng dụng nền lên , trong cài đặt chung -> làm mới ứng dụng nền
-  // lưu ý làm mới ứng dụng nền có thể được người dùng tắt hoặc nếu mở chế độ tiết kiệm pin thì cũng sẽ tự động tắt
-  // vậy ở api sẽ chia ra 2 loại gửi 1 là gửi cho android và 2 là gửi cho IOS,
-  //nếu ở IOS thì gửi như bình thường, ở android thì chỉ gửi dữ liệu sau đó lên hàm setBackgroundMessageHandler gửi noti thông qua notifee để không bị gửi 2 lần
-  messaging().setBackgroundMessageHandler(async remoteMessage => {
-    // console.log('remoteMessageBackground', remoteMessage);
-    const dataNotification = remoteMessage.data as DataNotificationType;
+  // // nếu IOS. muốn chạy vào hàm này thì phải đặt biến contentAvailable = true trên api send, và không được đính kèm notification chỉ gửi data
+  //   // và trên thiết bị di động phải mở chế độ làm mới ứng dụng nền lên , trong cài đặt chung -> làm mới ứng dụng nền
+  //   // lưu ý làm mới ứng dụng nền có thể được người dùng tắt hoặc nếu mở chế độ tiết kiệm pin thì cũng sẽ tự động tắt
+  //   // vậy ở api sẽ chia ra 2 loại gửi 1 là gửi cho android và 2 là gửi cho IOS,
+  //   //nếu ở IOS thì gửi như bình thường, ở android thì chỉ gửi dữ liệu sau đó lên hàm setBackgroundMessageHandler gửi noti thông qua notifee để không bị gửi 2 lần
+  //   messaging().setBackgroundMessageHandler(async remoteMessage => {
+  //     // console.log('remoteMessageBackground', remoteMessage);
+  //     const dataNotification = remoteMessage.data;
 
-    if (dataNotification) {
-      if (dataNotification.dataOnly === true) {
-        // ở chế độ background, nếu data only = true có nghĩa là nếu thông báo chỉ có data không thì
-        //sẽ gửi bằng notifee còn ngược lại thì sẽ gửi bằng mặc định của notification
-        onDisplayNotification({
-          title: dataNotification.title as string,
-          body: dataNotification.body as string,
-          caterory: dataNotification.category as string,
-          data: dataNotification,
-        });
-      }
-    }
-  });
+  //     if (dataNotification) {
+  //       const result = JSON.parse(
+  //         JSON.stringify(dataNotification),
+  //       ) as DataNotificationType;
 
-  // khi người dùng bấm vào 2 nút trên notification
-  notifee.onBackgroundEvent(async ({type, detail}) => {
-    const {notification, pressAction} = detail;
+  //       if (Boolean(result.dataOnly) === true) {
+  //         // ở chế độ background, nếu data only = true có nghĩa là nếu thông báo chỉ có data không thì
+  //         //sẽ gửi bằng notifee còn ngược lại thì sẽ gửi bằng mặc định của notification
+  //         onDisplayNotification({
+  //           title: result.title as string,
+  //           body: result.body as string,
+  //           caterory: result.category as string,
+  //           data: result,
+  //         });
+  //       }
+  //     }
+  //   });
 
-    // nếu ngừoi dùng bấm vào tiếp nhận
-    if (type === EventType.ACTION_PRESS && pressAction?.id === 'receive') {
-      const dataNotification = notification?.data as DataNotificationType;
-      if (dataNotification) {
-        const props: PropsSaveActionChooseType = {
-          description: '',
-          id_dd: dataNotification.iddd as number,
-          id_may: dataNotification.idmay as number,
-          id_sk: 5,
-          loai: 1,
-          nngu: dataNotification.language as number,
-          sn_bth: dataNotification.snbth as string,
-          username: dataNotification.username as string,
-          idsc: dataNotification.idsc as number,
-        };
+  //   // khi người dùng bấm vào 2 nút trên notification
+  //   notifee.onBackgroundEvent(async ({type, detail}) => {
+  //     const {notification, pressAction} = detail;
 
-        const fetchResult = await issuesService.saveActionChoose(props);
-        if (fetchResult.IsSuccessStatusCode) {
-          onDisplayNotification({
-            title: dataNotification.title as string,
-            body: fetchResult.ResponseData.ResponseMessage as string,
-            caterory: '',
-          });
-        }
-      }
+  //     // nếu ngừoi dùng bấm vào tiếp nhận
+  //     if (type === EventType.ACTION_PRESS && pressAction?.id === 'receive') {
+  //       const dataNotification = notification?.data as DataNotificationType;
+  //       if (dataNotification) {
+  //         const props: PropsSaveActionChooseType = {
+  //           description: '',
+  //           id_dd: dataNotification.iddd as number,
+  //           id_may: dataNotification.idmay as number,
+  //           id_sk: 5,
+  //           loai: 1,
+  //           nngu: dataNotification.language as number,
+  //           sn_bth: dataNotification.snbth as string,
+  //           username: dataNotification.username as string,
+  //           idsc: dataNotification.idsc as number,
+  //         };
 
-      // Remove the notification
-      await notifee.cancelNotification(notification?.id as string);
-    } else if (
-      // nếu người dùng bấm vào cancel
-      type === EventType.ACTION_PRESS &&
-      pressAction?.id === 'cancel'
-    ) {
-      console.log('Đã cancel');
-      await notifee.cancelNotification(notification?.id as string);
-    }
-  });
+  //         const fetchResult = await issuesService.saveActionChoose(props);
+  //         if (fetchResult.IsSuccessStatusCode) {
+  //           onDisplayNotification({
+  //             title: dataNotification.title as string,
+  //             body: fetchResult.ResponseData.ResponseMessage as string,
+  //             caterory: '',
+  //           });
+  //         }
+  //       }
 
+  //       // Remove the notification
+  //       await notifee.cancelNotification(notification?.id as string);
+  //     } else if (
+  //       // nếu người dùng bấm vào cancel
+  //       type === EventType.ACTION_PRESS &&
+  //       pressAction?.id === 'cancel'
+  //     ) {
+  //       console.log('Đã cancel');
+  //       await notifee.cancelNotification(notification?.id as string);
+  //     }
+  //   });
   return (
     <Provider store={store}>
       <I18nextProvider i18n={i18next}>

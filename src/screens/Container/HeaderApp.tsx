@@ -52,7 +52,9 @@ const HeaderApp = (props: Props) => {
           </>
         )}
         <View className={`flex-1 ${isGoBack ? 'items-end' : 'items-start'}`}>
-          <Text style={[Theme.font, styles.username]}>{userInfo.HO_TEN}</Text>
+          <Text style={[Theme.font, styles.username]}>
+            {userInfo.HO_TEN + '-' + userInfo.MS_NS}
+          </Text>
         </View>
       </View>
     </View>

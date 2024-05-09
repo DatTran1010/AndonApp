@@ -85,12 +85,13 @@ const AddCheckin = React.forwardRef((props: Props, ref) => {
       }
     };
 
-    isShowAcction && fetchingData();
+    fetchingData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShowAcction]);
 
   React.useImperativeHandle(ref, () => ({
     handleShowAcction,
+    handleSaveCheckin,
   }));
 
   const handleSelectDevice = (deviceid: number) => {

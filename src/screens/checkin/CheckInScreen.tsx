@@ -1,6 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {NavigationProp} from '@react-navigation/native';
 import {globalStyles} from '../../styles/globalStyles';
 import ListCheckIn from './ListCheckIn';
 import HeaderFilterCheckin from './HeaderFilterCheckin';
@@ -13,14 +12,11 @@ import {getListMayCheckinByCa} from '../../apis/checkinServices';
 import {setCheckDataMayCheckin} from '../../redux/AppSlice';
 import {useAppSelector} from '../../redux/Store';
 
-interface Props {
-  navigation?: NavigationProp<any, any>;
-}
-const CheckInScreen = (props: Props) => {
-  const {navigation} = props;
+const CheckInScreen = () => {
   const dispatch = useDispatch();
   const language = useAppSelector(state => state.app.language);
   const username = useAppSelector(state => state.app.userName);
+  const checkinStatus = useAppSelector(state => state.auth.checkinStatus);
 
   const [propsFilter, setPropsFilter] = React.useState({
     idca: -1,
@@ -29,6 +25,7 @@ const CheckInScreen = (props: Props) => {
 
   const refAddCheckin = React.useRef<{
     handleShowAcction: () => void;
+    handleSaveCheckin: () => void;
   }>(null);
 
   //#region  mutaion
@@ -69,6 +66,14 @@ const CheckInScreen = (props: Props) => {
     await fetchingDataMayCheckin(propsFilter.idca, propsFilter.ngay);
   };
 
+  const handleCheckinButton = () => {
+    if (checkinStatus?.ResponseData) {
+      refAddCheckin.current?.handleShowAcction();
+    } else {
+      refAddCheckin.current?.handleSaveCheckin();
+    }
+  };
+
   return (
     <View style={globalStyles.container}>
       <View style={styles.headrContent}>
@@ -88,12 +93,10 @@ const CheckInScreen = (props: Props) => {
           activeOpacity={0.8}
           style={styles.plus}
           className="w-16 h-16 items-center justify-center"
-          onPress={() => {
-            refAddCheckin.current?.handleShowAcction();
-          }}>
+          onPress={handleCheckinButton}>
           <IconTypeComponent
-            iconname="plus"
-            type="Feather"
+            iconname={checkinStatus?.ResponseData ? 'plus' : 'checkmark'}
+            type={checkinStatus?.ResponseData ? 'Feather' : 'ionicons'}
             iconcolor={Colors.white}
           />
         </TouchableOpacity>

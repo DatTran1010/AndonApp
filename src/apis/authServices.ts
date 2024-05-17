@@ -4,6 +4,7 @@ import {
   CallApiResponse,
   UserProfileType,
 } from '../types/CommonType';
+import {NotificationHistoryType} from '../types/authType';
 import http from '../utils/https';
 import ApiUrl from './ApiUrl';
 
@@ -71,6 +72,14 @@ const authServicesHttp = {
       params: {
         username,
         password,
+      },
+    }),
+
+  notificationHistory: (username: string, language: number) =>
+    http.get<NotificationHistoryType[]>(ApiUrl.auth.NotificationHistory, {
+      params: {
+        username,
+        language,
       },
     }),
 };

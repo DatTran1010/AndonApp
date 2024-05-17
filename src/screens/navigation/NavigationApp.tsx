@@ -6,6 +6,7 @@ import {
   NavigationContainerRef,
 } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+import {t} from 'i18next';
 
 import NavigationService from './NavigationService';
 import {LoginScreen} from '../auth';
@@ -26,7 +27,7 @@ import ReportScreen from '../report/ReportScreen';
 import ReportDetailScreen from '../report/details/ReportDetailScreen';
 import EditProfileScreen from '../userprofile/EditProfileScreen';
 import ChangePassWordScreen from '../userprofile/ChangePassWordScreen';
-import {t} from 'i18next';
+import NotificationHistoryScreen from '../userprofile/NotificationHistoryScreen';
 
 const NavigationApp = () => {
   const Stack = createStackNavigator();
@@ -200,6 +201,16 @@ const NavigationApp = () => {
           options={{
             header: () => (
               <HeaderApp isGoBack={true} title={t('doi-mat-khau')} />
+            ),
+          }}
+        />
+
+        <Stack.Screen
+          name="NotificationHistoryScreen"
+          component={NotificationHistoryScreen}
+          options={{
+            header: () => (
+              <HeaderApp isGoBack={true} title={t('thong-bao-s')} />
             ),
           }}
         />

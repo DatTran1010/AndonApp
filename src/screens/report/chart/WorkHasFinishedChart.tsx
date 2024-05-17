@@ -34,18 +34,15 @@ const WorkHasFinishedChart = (props: Props) => {
                     : maxValue
                     ? '0%'
                     : value.toString() + '%',
-                  backgroundColor: '#fcdca5',
+                  backgroundColor: 'white',
                   position: 'absolute',
                   zIndex: 1,
-                  borderColor: 'black',
-                  borderWidth: 0.3,
                 } as ViewStyle,
               ]}
               className="w-10 items-center justify-end"
             />
             <View
               style={[
-                Theme.shadow,
                 styles.chart,
                 {
                   height: '75%',
@@ -76,8 +73,6 @@ export default WorkHasFinishedChart;
 const styles = StyleSheet.create({
   chart: {
     backgroundColor: Colors.primarySecond,
-    borderColor: 'black',
-    borderWidth: 0.3,
     marginBottom: 5,
   },
 });

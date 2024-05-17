@@ -100,5 +100,6 @@
   "new-password": "Nhập mật khẩu mới",
   "confirm-password": "Xác nhận mật khẩu",
   "doi-mat-khau-thanh-cong-vui-long-dang-nhap-lai": "Đổi mật khẩu thành công. Vui lòng đăng nhập lại",
-  "doi-mat-khau-khong-thanh-cong": "Đổi. mật khẩu không thành công"
+  "doi-mat-khau-khong-thanh-cong": "Đổi. mật khẩu không thành công",
+  "thong-bao-s": "Danh sách thông báo"
 }

@@ -12,6 +12,7 @@ export default {
     CheckinStatus: '/api/account/check-in-status',
     Logout: '/api/account/logout',
     ChangePassword: '/api/account/change-password',
+    NotificationHistory: 'api/home/list-notification-history',
   },
   issues: {
     GetListIssuesByUser: '/api/app/issues/get-list-issues-by-user',

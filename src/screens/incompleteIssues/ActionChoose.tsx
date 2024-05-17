@@ -39,7 +39,7 @@ const ActionChoose = (props: Props) => {
   }>({
     idnn: -1,
     description: '',
-    tgnm: 0,
+    tgnm: data.TG_NM,
   });
 
   const dataPendingProcessing = [

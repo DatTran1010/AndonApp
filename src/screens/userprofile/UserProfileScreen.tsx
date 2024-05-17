@@ -72,6 +72,9 @@ const UserProfileScreen = (props: Props) => {
       </View>
       <View className="flex-1 gap-5">
         <TouchableOpacity
+          onPress={() => {
+            navigation?.navigate('NotificationHistoryScreen');
+          }}
           activeOpacity={0.8}
           className="flex-row items-center justify-between">
           <View className="flex-row items-center gap-3">

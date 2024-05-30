@@ -78,7 +78,7 @@ const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
         <View style={styles.headerScreen}>
           <View style={styles.viewImage}>
             <Image
-              source={require('../../../assets/Logo.png')}
+              source={require('../../../assets/Logo.jpg')}
               style={[styles.imageLogo]}
               resizeMode="contain"
             />
@@ -126,7 +126,7 @@ const LoginScreen: React.FC<LoginProps> = ({navigation}) => {
 
                 <View className="items-end">
                   <CheckboxComponent
-                    label="Lưu đăng nhập"
+                    label={t('luu-dang-nhap')}
                     value={values.rememberme}
                     onPress={() => {
                       setFieldValue('rememberme', !values.rememberme);

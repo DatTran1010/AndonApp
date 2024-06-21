@@ -117,15 +117,20 @@ export const getListDevicesNotHaveChecked = async (
 };
 
 interface PropsSaveCheckin extends PropsListMayCheckinByCa {
-  jsondata: string;
+  data: DevicesModelType[];
 }
 
 export const saveCheckin = async (props: PropsSaveCheckin) => {
   try {
     const endpoint = ApiUrl.CheckinURL.SaveCheckin;
     const method = 'POST';
-    const data = null;
-    const params = props;
+    const data = props.data;
+    const params = {
+      nngu: props.nngu,
+      username: props.username,
+      ngay: props.ngay,
+      idca: props.idca,
+    };
     const contenttype = 'application/json';
 
     // Gọi API và xử lý kết quả

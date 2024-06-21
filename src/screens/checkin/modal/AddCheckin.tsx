@@ -1,8 +1,9 @@
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import React from 'react';
 import {
   AcctionSheetComponent,
   ButtonComponent,
+  IconTypeComponent,
   KeyboardViewComponent,
   SearchComponent,
   SnackbarComponent,
@@ -69,6 +70,7 @@ const AddCheckin = React.forwardRef((props: Props, ref) => {
   React.useEffect(() => {
     const fetchingData = async () => {
       const result = await fetchDataDevices.refetch();
+
       if (result.data?.IsSuccessStatusCode) {
         setDataDevices(result.data.ResponseData);
         dataDevicesRef.current = result.data.ResponseData;
@@ -94,30 +96,39 @@ const AddCheckin = React.forwardRef((props: Props, ref) => {
     handleSaveCheckin,
   }));
 
-  const handleSelectDevice = (deviceid: number) => {
+  const handleSelectDevice = (deviceid: number, all: boolean) => {
     const updateData = dataDevicesRef.current.map(item => {
-      if (item.ID_MAY === deviceid) {
+      if (all) {
+        return {...item, CHON: !item.CHON};
+      } else if (item.ID_MAY === deviceid) {
         return {...item, CHON: !item.CHON};
       } else {
         return {...item};
       }
     });
+
     dataDevicesRef.current = updateData;
     setDataDevices(prev =>
       prev.map(device =>
-        device.ID_MAY === deviceid ? {...device, CHON: !device.CHON} : device,
+        all
+          ? {...device, CHON: !device.CHON}
+          : device.ID_MAY === deviceid
+          ? {...device, CHON: !device.CHON}
+          : device,
       ),
     );
   };
 
   const handleSaveCheckin = async () => {
+    const dataChoose = dataDevicesRef.current.filter(item => item.CHON);
+
     await saveCheckinMutaion.mutateAsync(
       {
         idca: idca,
         ngay: ngay,
         nngu: language,
         username: username,
-        jsondata: JSON.stringify(dataDevicesRef.current),
+        data: dataChoose,
       },
       {
         onSuccess(data) {
@@ -174,7 +185,10 @@ const AddCheckin = React.forwardRef((props: Props, ref) => {
                   <View key={device.ID_MAY} className="flex-1">
                     <ItemDevice
                       device={device}
-                      onPressCheckDevice={handleSelectDevice}
+                      onPressCheckDevice={id => handleSelectDevice(id, false)}
+                      onLongPress={() => {
+                        handleSelectDevice(device.ID_MAY, true);
+                      }}
                     />
                   </View>
                 );

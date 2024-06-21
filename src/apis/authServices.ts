@@ -61,11 +61,7 @@ const authServicesHttp = {
     }),
 
   logOut: (username: string) =>
-    http.post<boolean>(ApiUrl.auth.Logout, null, {
-      params: {
-        Username: username,
-      },
-    }),
+    http.post<boolean>(ApiUrl.auth.Logout + '/' + username, null),
 
   changePassword: (username: string, password: string) =>
     http.post<boolean>(ApiUrl.auth.ChangePassword, null, {
